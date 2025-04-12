@@ -19,11 +19,11 @@ model User {
   name         String
   email        String   @unique
   password     String
-  profileImage String?
+  profileImage String?  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
   role         Role
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
-  isVerified   Boolean
+  isVerified   Boolean  @default(false)
 }
 
 enum Role {
