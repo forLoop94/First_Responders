@@ -1,0 +1,33 @@
+{
+  "name": "first_responders",
+  "version": "1.0.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "devStart": "nodemon script.ts"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/forLoop94/First_Responders.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/forLoop94/First_Responders/issues"
+  },
+  "homepage": "https://github.com/forLoop94/First_Responders#readme",
+  "dependencies": {
+    "@prisma/client": "^6.6.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.5.0",
+    "express": "^5.1.0"
+  },
+  "devDependencies": {
+    "@types/node": "^22.13.14",
+    "nodemon": "^3.1.9",
+    "prisma": "^6.5.0",
+    "ts-node": "^10.9.2",
+    "typescript": "^5.8.2"
+  }
+}
