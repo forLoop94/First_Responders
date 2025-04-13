@@ -2,6 +2,7 @@ import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
 import { useCors } from "./utils/cors";
+import userRouter from "./routes/api/user";
 
 dotenv.config();
 
@@ -12,3 +13,5 @@ app.use(cors(useCors()));
 app.listen(process.env.PORT, () => {
   console.log(`server running on port ${process.env.PORT}`);
 });
+
+app.use("/api/users", userRouter);
