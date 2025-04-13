@@ -5,6 +5,6 @@
     "strict": true,
     "lib": ["esnext"],
     "esModuleInterop": true,
-    "types": ["node"]
+    "types": ["node", "express"]
   }
 }
