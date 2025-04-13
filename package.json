@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "devStart": "nodemon script.ts"
+    "devStart": "nodemon script.ts",
+    "dev": "nodemon server.ts"
   },
   "repository": {
     "type": "git",
@@ -24,6 +25,8 @@
     "express": "^5.1.0"
   },
   "devDependencies": {
+    "@types/cors": "^2.8.17",
+    "@types/express": "^5.0.1",
     "@types/node": "^22.13.14",
     "nodemon": "^3.1.9",
     "prisma": "^6.5.0",
