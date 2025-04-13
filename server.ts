@@ -3,6 +3,7 @@ import cors from "cors";
 import dotenv from "dotenv";
 import { useCors } from "./utils/cors";
 import userRouter from "./routes/api/user";
+import authRouter from "./routes/api/auth";
 
 dotenv.config();
 
@@ -15,3 +16,4 @@ app.listen(process.env.PORT, () => {
 });
 
 app.use("/api/users", userRouter);
+app.use("/api/auth", authRouter);

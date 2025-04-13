@@ -1,7 +1,7 @@
 import { Request, Response } from "express";
 
-import { PrismaClient } from "../generated/prisma";
-import { sendError, sendSuccess } from "../utils/response";
+import { PrismaClient } from "../../generated/prisma";
+import { sendError, sendSuccess } from "../../utils/response";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
