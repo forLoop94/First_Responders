@@ -2,6 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import { sendError, sendSuccess } from "../../utils/response";
 import { PrismaClient } from "../../generated/prisma";
+import { sendVerificationEmail } from "../../mailer";
 import { matchPassword } from "../../utils/matchPassword";
 import { generateAccessToken } from "../../utils/generateToken";
 const prisma = new PrismaClient();
@@ -25,7 +26,8 @@ export const registerUser = async (req: Request, res: Response) => {
       data: { name, email, password: hashedPassword, role },
     });
 
-    sendSuccess(res, "User succesfully created", newUser, 201);
+    //sendSuccess(res, "User succesfully created", newUser, 201);
+    sendVerificationEmail(newUser, res);
   } catch (error) {
     console.error("Registration error:", error);
     return sendError(res, "An error occurred during user registration.");
@@ -45,8 +47,6 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     }
 
     const isMatch = await matchPassword(password, user.password);
-
-    console.log(isMatch);
 
     if (!isMatch) {
       return sendError(res, "Invalid email or password", 403);
