@@ -54,7 +54,7 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     return sendSuccess(
       res,
       "Login Succesful",
-      { ...user, token: generateAccessToken(user.id) },
+      { ...user, token: generateAccessToken(user.id, user.role) },
       200
     );
   } catch (error) {
