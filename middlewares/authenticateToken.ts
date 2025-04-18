@@ -1,7 +1,10 @@
 import jwt from "jsonwebtoken";
 import dotenv from "dotenv";
 import { Request, Response, NextFunction } from "express";
-import { AuthenticatedRequest } from "../types/authenticatedRequest";
+import {
+  AuthenticatedRequest,
+  IJwtPayload,
+} from "../types/authenticatedRequest";
 import { sendError } from "../utils/response";
 
 dotenv.config();
@@ -11,8 +14,7 @@ export const authenticateToken = (
   res: Response,
   next: NextFunction
 ) => {
-  const authHeader = req.headers["authorization"];
-  const token = authHeader?.split(" ")[1];
+  const token = req.cookies.access_token;
   if (!token) {
     sendError(res, "Unauthorized. Login again", 401);
     return;
@@ -24,12 +26,15 @@ export const authenticateToken = (
     );
   }
 
-  jwt.verify(token, process.env.ACCESS_TOKEN_SECRET, (err, user) => {
-    if (err) {
-      sendError(res, "Unauthorized. Login again", 401);
-      return;
-    }
-    req.user = user as jwt.JwtPayload;
+  try {
+    const decoded = jwt.verify(
+      token,
+      process.env.ACCESS_TOKEN_SECRET
+    ) as IJwtPayload;
+    req.user = decoded;
     next();
-  });
+  } catch (error) {
+    sendError(res, "Unauthorized. Login again", 401);
+    return;
+  }
 };

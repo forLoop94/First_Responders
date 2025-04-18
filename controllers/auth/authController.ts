@@ -51,12 +51,17 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     if (!isMatch) {
       return sendError(res, "Invalid email or password", 403);
     }
-    return sendSuccess(
-      res,
-      "Login Succesful",
-      { ...user, token: generateAccessToken(user.id, user.role) },
-      200
-    );
+
+    const token = generateAccessToken(user.id, user.role);
+
+    res.cookie("access_token", token, {
+      httpOnly: true,
+      secure: false,
+      sameSite: "lax",
+      maxAge: 3600000,
+    });
+
+    return sendSuccess(res, "Login Succesful");
   } catch (error) {
     console.error("Login error:", error);
     return sendError(res, "An error occurred during user login.");

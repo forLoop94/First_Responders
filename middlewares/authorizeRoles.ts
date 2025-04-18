@@ -1,6 +1,6 @@
 import { Response, NextFunction } from "express";
 import { AuthenticatedRequest } from "../types/authenticatedRequest";
-import { JwtPayload } from "jsonwebtoken";
+import { sendError } from "../utils/response";
 
 export const authorizeRoles = (...allowedRoles: string[]) => {
   return (
@@ -8,10 +8,11 @@ export const authorizeRoles = (...allowedRoles: string[]) => {
     res: Response,
     next: NextFunction
   ): void => {
-    const user = req.user as JwtPayload & { role: string };
-    console.log("User:", user, "Allowed:", allowedRoles);
+    if (!req.user) {
+      return sendError(res, "Unauthorized. Please log in again.", 401);
+    }
 
-    if (!allowedRoles.includes(user.role)) {
+    if (!allowedRoles.includes(req.user.role)) {
       res.status(403).json({ message: "Access denied" });
       return;
     }
