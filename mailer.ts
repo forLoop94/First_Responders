@@ -34,8 +34,6 @@ export const sendVerificationEmail = async (
   { id, email }: ISendVerificationEmailUser,
   res: Response
 ) => {
-  //const currentUrl = process.env.CURRENT_VERIFICATION_URL;
-
   const uniqueString = uuidv4();
 
   const mailOptions = {

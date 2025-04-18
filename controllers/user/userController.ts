@@ -62,7 +62,7 @@ export const getCurrentUser = async (
   if (!req.user) {
     return sendError(res, "Unauthorized. Please log in again.", 401);
   }
-
+  console.log(req.user);
   try {
     const user = await prisma.user.findUnique({
       where: { id: req.user.id },

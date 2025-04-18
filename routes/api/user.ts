@@ -9,8 +9,8 @@ import { authorizeRoles } from "../../middlewares/authorizeRoles";
 
 const router = Router();
 
-router.get("/", authenticateToken, authorizeRoles("DOCTOR"), getUsers);
-router.get("/:id", getUser);
+router.get("/", authenticateToken, getUsers);
 router.get("/currentUser", authenticateToken, getCurrentUser);
+router.get("/:id", getUser);
 
 export default router;

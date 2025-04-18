@@ -7,10 +7,12 @@ import {
 import "./App.css";
 import Login from "./pages/Login";
 import Growl from "./components/Growler";
+import Root from "./pages/Root";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
     <Route>
+      <Route path="/" element={<Root />} />
       <Route path="/login" element={<Login />} />
     </Route>
   )
