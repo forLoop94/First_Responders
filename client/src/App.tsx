@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/Login";
+import Growl from "./components/Growler";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -15,6 +16,11 @@ const router = createBrowserRouter(
   )
 );
 
-const App = () => <RouterProvider router={router} />;
+const App = () => (
+  <>
+    <Growl />
+    <RouterProvider router={router} />
+  </>
+);
 
 export default App;
