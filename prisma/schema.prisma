@@ -34,6 +34,14 @@ model UserVerification {
   expiresAt    DateTime
 }
 
+model PasswordReset {
+  id          String   @id @default(uuid())
+  userId      String
+  resetString String
+  createdAt   DateTime
+  expiresAt   DateTime
+}
+
 enum Role {
   DOCTOR
   PATIENT

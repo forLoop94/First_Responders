@@ -5,7 +5,7 @@ import { v4 as uuidv4 } from "uuid";
 import { PrismaClient } from "./generated/prisma";
 const prisma = new PrismaClient();
 import dotenv from "dotenv";
-import { sendSuccess } from "./utils/response";
+import { sendError, sendSuccess } from "./utils/response";
 dotenv.config();
 
 interface ISendVerificationEmailUser {
@@ -61,9 +61,45 @@ export const sendVerificationEmail = async (
     },
   });
 
-  if (createDetails) {
-    sendSuccess(res, "Verification data saved successfully");
+  if (!createDetails) {
+    sendSuccess(res, "Verification data saved not found");
   }
 
   transporter.sendMail(mailOptions);
+  sendSuccess(res, "Check your inbox for instructions on how to proceed");
+};
+
+export const sendResetEmail = async (
+  { id, email }: ISendVerificationEmailUser,
+  res: Response
+) => {
+  const resetString = uuidv4();
+
+  const mailOptions = {
+    from: process.env.AUTH_EMAIL,
+    to: email,
+    subject: "Verify Password Reset",
+    html: `<p>Verify that you want to reset your password. Please ignore if it's not you</p><p>This link <b>Expires in 10 minutes</b>Click <a href=${
+      process.env.RESET_PASSWORD_REDIRECT_URL + id + "/" + resetString
+    }>here</a></p>`,
+  };
+
+  const salt = 10;
+  const hashedResetString = await bcrypt.hash(resetString, salt);
+
+  const createDetails = await prisma.passwordReset.create({
+    data: {
+      userId: id,
+      resetString: hashedResetString,
+      createdAt: new Date(),
+      expiresAt: new Date(Date.now() + 600000),
+    },
+  });
+
+  if (!createDetails) {
+    sendError(res, "Password reset data not found");
+  }
+
+  transporter.sendMail(mailOptions);
+  sendSuccess(res, "Check your inbox for instructions on how to proceed");
 };

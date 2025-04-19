@@ -3,14 +3,21 @@ import { growl } from "../utils/growl";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 
+interface IResetData {
+  password: string;
+  confirmPassword: string;
+  userId: string;
+  resetString: string;
+}
+
 const ResetPassword = () => {
   const navigate = useNavigate();
   const params = useParams();
-  const [data, setData] = useState({
+  const [data, setData] = useState<IResetData>({
     password: "",
     confirmPassword: "",
-    userId: params.userId,
-    resetString: params.resetString,
+    userId: params.id!,
+    resetString: params.resetString!,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -26,6 +33,13 @@ const ResetPassword = () => {
       const result = response.data;
 
       if (result.success) {
+        navigate("/login");
+        setData({
+          password: "",
+          confirmPassword: "",
+          userId: "",
+          resetString: "",
+        });
         growl(result.message, "success");
       } else {
         growl(result.message, "error");

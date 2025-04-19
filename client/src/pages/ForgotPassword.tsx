@@ -16,6 +16,7 @@ const ResetPassword = () => {
       const result = response.data;
 
       if (result.success) {
+        setEmail("");
         growl(result.message, "success");
       } else {
         growl(result.message, "error");
