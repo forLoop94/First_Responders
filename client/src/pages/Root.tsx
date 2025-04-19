@@ -1,8 +1,11 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { growl } from "../utils/growl";
+import { useNavigate } from "react-router-dom";
 
 const Root = () => {
+  const navigate = useNavigate();
+
   useEffect(() => {
     getCurrentUser();
   }, []);
@@ -40,7 +43,14 @@ const Root = () => {
             }
           );
           return res.data;
-        } catch (refreshError) {
+        } catch (refreshError: any) {
+          console.log("holla:", refreshError);
+
+          if (refreshError.response?.status === 401) {
+            navigate("/login");
+            growl("Session expired. Login again", "info");
+            return;
+          }
           console.error("Token refresh failed", refreshError);
         }
       }

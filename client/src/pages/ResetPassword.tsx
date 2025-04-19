@@ -1,13 +1,16 @@
 import React, { useState } from "react";
 import { growl } from "../utils/growl";
 import axios from "axios";
-import { useNavigate } from "react-router-dom";
+import { useNavigate, useParams } from "react-router-dom";
 
-const Login = () => {
+const ResetPassword = () => {
   const navigate = useNavigate();
+  const params = useParams();
   const [data, setData] = useState({
-    email: "",
     password: "",
+    confirmPassword: "",
+    userId: params.userId,
+    resetString: params.resetString,
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
@@ -15,7 +18,7 @@ const Login = () => {
 
     try {
       const response: any = await axios.post(
-        "http://localhost:5500/api/auth/login",
+        "http://localhost:5500/api/auth/resetPassword",
         data,
         { withCredentials: true }
       );
@@ -23,14 +26,12 @@ const Login = () => {
       const result = response.data;
 
       if (result.success) {
-        navigate("/");
         growl(result.message, "success");
       } else {
-        navigate("/login");
         growl(result.message, "error");
       }
     } catch (error: any) {
-      console.error("Login failed:", error);
+      console.error("Password reset failed:", error);
       growl(error.message, "error");
     }
   };
@@ -52,7 +53,7 @@ const Login = () => {
               <span className="text-primary">Care</span>
             </h2>
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
-              Welcome Back!
+              Reset Password
             </h1>
           </div>
           <fieldset className="fieldset flex flex-col w-full max-w-sm shrink-0">
@@ -61,38 +62,24 @@ const Login = () => {
               className="fieldset flex flex-col w-full max-w-sm shrink-0"
             >
               <input
-                type="email"
-                name="email"
+                type="password"
+                name="password"
                 className="input mb-3 w-full"
-                placeholder="Email"
+                placeholder="New Password"
                 onChange={handleChange}
                 required
               />
               <input
                 type="password"
-                name="password"
-                className="input mb-2 w-full"
-                placeholder="Password"
+                name="confirmPassword"
+                className="input mb-3 w-full"
+                placeholder="Confirm Password"
                 onChange={handleChange}
                 required
               />
-              <div className="self-end">
-                <div
-                  onClick={() => navigate("/forgot-password")}
-                  className="hover:text-primary cursor-pointer"
-                >
-                  Forgot password?
-                </div>
-              </div>
               <button type="submit" className="btn btn-primary mt-2">
-                Login
+                Reset Password
               </button>
-              <div>
-                <p className="text-center text-[1rem] mt-4">
-                  Don't have an account?{" "}
-                  <span className="text-primary cursor-pointer">Sign up</span>
-                </p>
-              </div>
             </form>
           </fieldset>
         </div>
@@ -101,4 +88,4 @@ const Login = () => {
   );
 };
 
-export default Login;
+export default ResetPassword;
