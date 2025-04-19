@@ -25,6 +25,26 @@ const Root = () => {
         growl(result.message, "error");
       }
     } catch (error: any) {
+      if (error.response?.status === 401) {
+        try {
+          await axios.post(
+            "http://localhost:5500/api/auth/refresh",
+            {},
+            { withCredentials: true }
+          );
+
+          const res = await axios.get(
+            "http://localhost:5500/api/users/currentUser",
+            {
+              withCredentials: true,
+            }
+          );
+          return res.data;
+        } catch (refreshError) {
+          console.error("Token refresh failed", refreshError);
+        }
+      }
+
       console.error("Login failed:", error);
       growl(error.message, "error");
     }
