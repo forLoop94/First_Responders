@@ -67,3 +67,12 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
     return sendError(res, "An error occurred during user login.");
   }
 };
+
+export const logoutUser = (req: Request, res: Response) => {
+  res.clearCookie("access_token", {
+    httpOnly: true,
+    secure: true,
+    sameSite: "lax",
+  });
+  res.json({ message: "Logged out" });
+};
