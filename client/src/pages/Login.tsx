@@ -2,9 +2,11 @@ import React, { useState } from "react";
 import { growl } from "../utils/growl";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
+import LoadingButton from "../components/LoadingButton";
 
-const Login = () => {
+const Login: React.FC = () => {
   const navigate = useNavigate();
+  const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState({
     email: "",
     password: "",
@@ -14,6 +16,7 @@ const Login = () => {
     e.preventDefault();
 
     try {
+      setIsLoading(true);
       const response: any = await axios.post(
         "http://localhost:5500/api/auth/login",
         data,
@@ -30,8 +33,11 @@ const Login = () => {
         growl(result.message, "error");
       }
     } catch (error: any) {
+      setIsLoading(true);
       console.error("Login failed:", error);
       growl(error.message, "error");
+    } finally {
+      setIsLoading(false);
     }
   };
 
@@ -84,8 +90,13 @@ const Login = () => {
                   Forgot password?
                 </div>
               </div>
-              <button type="submit" className="btn btn-primary mt-2">
-                Login
+
+              <button
+                type="submit"
+                className="btn btn-primary mt-2"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoadingButton text="Logging in" /> : "Login"}
               </button>
               <div>
                 <p className="text-center text-[1rem] mt-4">

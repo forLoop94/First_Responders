@@ -3,7 +3,7 @@ import axios from "axios";
 import { growl } from "../utils/growl";
 import { useNavigate } from "react-router-dom";
 
-const Root = () => {
+const Root: React.FC = () => {
   const navigate = useNavigate();
 
   useEffect(() => {

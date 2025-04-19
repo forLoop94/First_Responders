@@ -32,6 +32,12 @@ const Growl = () => {
         return (
           <div key={growl.id} className={`alert ${alertClass}`}>
             <span>{growl.message}</span>
+            <span
+              onClick={() => dispatch(removeGrowl(growl.id))}
+              className="cursor-pointer hover:text-[1rem]"
+            >
+              x
+            </span>
           </div>
         );
       })}

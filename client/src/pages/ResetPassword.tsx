@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import { growl } from "../utils/growl";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
+import LoadingButton from "../components/LoadingButton";
 
 interface IResetData {
   password: string;
@@ -13,6 +14,7 @@ interface IResetData {
 const ResetPassword = () => {
   const navigate = useNavigate();
   const params = useParams();
+  const [isLoading, setIsloading] = useState<boolean>(false);
   const [data, setData] = useState<IResetData>({
     password: "",
     confirmPassword: "",
@@ -24,6 +26,7 @@ const ResetPassword = () => {
     e.preventDefault();
 
     try {
+      setIsloading(true);
       const response: any = await axios.post(
         "http://localhost:5500/api/auth/resetPassword",
         data,
@@ -33,20 +36,23 @@ const ResetPassword = () => {
       const result = response.data;
 
       if (result.success) {
-        navigate("/login");
         setData({
           password: "",
           confirmPassword: "",
           userId: "",
           resetString: "",
         });
+        navigate("/login");
         growl(result.message, "success");
       } else {
         growl(result.message, "error");
       }
     } catch (error: any) {
+      setIsloading(true);
       console.error("Password reset failed:", error);
       growl(error.message, "error");
+    } finally {
+      setIsloading(false);
     }
   };
 
@@ -91,8 +97,12 @@ const ResetPassword = () => {
                 onChange={handleChange}
                 required
               />
-              <button type="submit" className="btn btn-primary mt-2">
-                Reset Password
+              <button
+                type="submit"
+                className="btn btn-primary mt-2"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoadingButton text="Logging in" /> : "Login"}
               </button>
             </form>
           </fieldset>

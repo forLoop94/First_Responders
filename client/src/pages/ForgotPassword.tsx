@@ -1,14 +1,17 @@
 import React, { useState } from "react";
 import { growl } from "../utils/growl";
 import axios from "axios";
+import LoadingButton from "../components/LoadingButton";
 
-const ResetPassword = () => {
-  const [email, setEmail] = useState("");
+const ForgotPassword: React.FC = () => {
+  const [email, setEmail] = useState<string>("");
+  const [isLoading, setIsloading] = useState<boolean>(false);
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
+      setIsloading(true);
       const response = await axios.get(
         `http://localhost:5500/api/auth/forgotPassword/${email}`
       );
@@ -22,8 +25,11 @@ const ResetPassword = () => {
         growl(result.message, "error");
       }
     } catch (error: any) {
+      setIsloading(true);
       console.error("Retrieval Email could not be sent:", error);
       growl(error.message, "error");
+    } finally {
+      setIsloading(false);
     }
   };
 
@@ -53,8 +59,16 @@ const ResetPassword = () => {
                 onChange={(e) => setEmail(e.target.value)}
                 required
               />
-              <button type="submit" className="btn btn-primary mt-2">
-                Send Email
+              <button
+                type="submit"
+                className="btn btn-primary mt-2"
+                disabled={isLoading}
+              >
+                {isLoading ? (
+                  <LoadingButton text="Sending mail" />
+                ) : (
+                  "Send Email"
+                )}
               </button>
             </form>
           </fieldset>
@@ -64,4 +78,4 @@ const ResetPassword = () => {
   );
 };
 
-export default ResetPassword;
+export default ForgotPassword;

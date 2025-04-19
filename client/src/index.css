@@ -21,6 +21,10 @@
   --color-primary-content: white;
   --color-secondary: #f0da69;
   --color-base-content: white;
+  --color-success-content: white;
+  --color-warning-content: white;
+  --color-info-content: white;
+  --color-error-content: white;
 
   /* border radius */
   --radius-selector: 0.5rem;
