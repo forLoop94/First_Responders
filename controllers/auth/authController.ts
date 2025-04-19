@@ -1,11 +1,21 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
+import jwt from "jsonwebtoken";
 import { sendError, sendSuccess } from "../../utils/response";
 import { PrismaClient } from "../../generated/prisma";
 import { sendVerificationEmail } from "../../mailer";
 import { matchPassword } from "../../utils/matchPassword";
-import { generateAccessToken } from "../../utils/generateToken";
+import {
+  generateAccessToken,
+  generateRefreshToken,
+} from "../../utils/generateToken";
 const prisma = new PrismaClient();
+import dotenv from "dotenv";
+import {
+  AuthenticatedRequest,
+  IJwtPayload,
+} from "../../types/authenticatedRequest";
+dotenv.config();
 
 export const registerUser = async (req: Request, res: Response) => {
   const { name, email, password, role } = req.body;
@@ -52,14 +62,22 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
       return sendError(res, "Invalid email or password", 403);
     }
 
-    const token = generateAccessToken(user.id, user.role);
+    const accessToken = generateAccessToken(user.id, user.role);
+    const refreshToken = generateRefreshToken(user.id, user.role);
 
-    res.cookie("access_token", token, {
-      httpOnly: true,
-      secure: false,
-      sameSite: "lax",
-      maxAge: 3600000,
-    });
+    res
+      .cookie("access_token", accessToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 60000,
+      })
+      .cookie("refresh_token", refreshToken, {
+        httpOnly: true,
+        secure: false,
+        sameSite: "lax",
+        maxAge: 180000,
+      });
 
     return sendSuccess(res, "Login Succesful");
   } catch (error) {
@@ -68,11 +86,37 @@ export const loginUser = async (req: Request, res: Response): Promise<void> => {
   }
 };
 
+export const tokenRefresh = async (req: Request, res: Response) => {
+  const refreshToken = req.cookies.refresh_token;
+
+  if (!refreshToken) {
+    sendError(res, "Refresh token not available or expired", 401);
+    return;
+  }
+
+  try {
+    const payload = jwt.verify(
+      refreshToken,
+      process.env.REFRESH_TOKEN_SECRET!
+    ) as IJwtPayload;
+
+    const newAccessToken = generateAccessToken(payload.id, payload.role);
+
+    res.cookie("access_token", newAccessToken, {
+      httpOnly: true,
+      sameSite: "lax",
+      maxAge: 60000,
+    });
+
+    sendSuccess(res, "Token refreshed", null);
+  } catch (error) {
+    sendError(res, "Invalid or expired refresh token", 403);
+    return;
+  }
+};
+
 export const logoutUser = (req: Request, res: Response) => {
-  res.clearCookie("access_token", {
-    httpOnly: true,
-    secure: true,
-    sameSite: "lax",
-  });
-  res.json({ message: "Logged out" });
+  res.clearCookie("access_token");
+  res.clearCookie("refresh_token");
+  sendSuccess(res, "Logged out successfully");
 };
