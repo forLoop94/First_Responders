@@ -3,6 +3,7 @@ import { growl } from "../../utils/growl";
 import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingButton from "../../components/LoadingButton";
+import Logo from "../../components/Logo";
 
 interface IResetData {
   password: string;
@@ -68,10 +69,7 @@ const ResetPassword: React.FC = () => {
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col">
           <div className="">
-            <h2 className="text-2xl mb-6 md:text-3xl">
-              <span className="text-base-content">Life</span>
-              <span className="text-primary">Care</span>
-            </h2>
+            <Logo />
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
               Reset Password
             </h1>

@@ -4,6 +4,7 @@ import axios from "axios";
 import LoadingButton from "../../components/LoadingButton";
 import { Role } from "../../enums/auth/e-auth";
 import { useNavigate } from "react-router-dom";
+import Logo from "../../components/Logo";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -58,10 +59,7 @@ const Register: React.FC = () => {
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col">
           <div className="">
-            <h2 className="text-2xl mb-6 md:text-3xl">
-              <span className="text-base-content">Life</span>
-              <span className="text-primary">Care</span>
-            </h2>
+            <Logo />
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
               Create Account!
             </h1>
