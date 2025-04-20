@@ -26,6 +26,22 @@ model User {
   isVerified   Boolean  @default(false)
 }
 
+model UserVerification {
+  id           String   @id @default(uuid())
+  userId       String
+  uniqueString String
+  createdAt    DateTime
+  expiresAt    DateTime
+}
+
+model PasswordReset {
+  id          String   @id @default(uuid())
+  userId      String
+  resetString String
+  createdAt   DateTime
+  expiresAt   DateTime
+}
+
 enum Role {
   DOCTOR
   PATIENT
