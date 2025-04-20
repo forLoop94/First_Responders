@@ -3,12 +3,12 @@ import React from "react";
 const Logo = () => {
   return (
     <div>
-      <b>
-        <h6 className="text-2xl mb-6 md:text-3xl">
+      <>
+        <h6 className="text-1xl mb-6 md:text-2xl">
           <span className="text-base-content">Life</span>
           <span className="text-primary">Care</span>
         </h6>
-      </b>
+      </>
     </div>
   );
 };
