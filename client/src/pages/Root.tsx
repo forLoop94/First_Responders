@@ -1,7 +1,8 @@
 import React, { useEffect } from "react";
 import axios from "axios";
 import { growl } from "../utils/growl";
-import { useNavigate } from "react-router-dom";
+import { Outlet, useNavigate } from "react-router-dom";
+import NavigationPanel from "../components/NavigationPanel";
 
 const Root: React.FC = () => {
   const navigate = useNavigate();
@@ -61,9 +62,12 @@ const Root: React.FC = () => {
   };
 
   return (
-    <>
-      <h1>Root</h1>
-    </>
+    <div className="flex">
+      <NavigationPanel />
+      <main className="flex-grow p-4 bg-base-200 h-screen">
+        <Outlet />
+      </main>
+    </div>
   );
 };
 
