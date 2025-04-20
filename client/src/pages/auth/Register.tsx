@@ -1,35 +1,38 @@
 import React, { useState } from "react";
-import { growl } from "../utils/growl";
+import { growl } from "../../utils/growl";
 import axios from "axios";
+import LoadingButton from "../../components/LoadingButton";
+import { Role } from "../../enums/auth/e-auth";
 import { useNavigate } from "react-router-dom";
-import LoadingButton from "../components/LoadingButton";
 
-const Login: React.FC = () => {
+const Register: React.FC = () => {
   const navigate = useNavigate();
+  const [selectedRole, setSelectedRole] = useState<Role>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState({
+    name: "",
     email: "",
     password: "",
+    role: "",
   });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
+    console.log(data);
 
     try {
       setIsLoading(true);
       const response: any = await axios.post(
-        "http://localhost:5500/api/auth/login",
-        data,
-        { withCredentials: true }
+        "http://localhost:5500/api/auth/register",
+        data
       );
 
       const result = response.data;
 
       if (result.success) {
-        navigate("/");
+        navigate("/login");
         growl(result.message, "success");
       } else {
-        navigate("/login");
         growl(result.message, "error");
       }
     } catch (error: any) {
@@ -41,7 +44,9 @@ const Login: React.FC = () => {
     }
   };
 
-  const handleChange = (e: any) => {
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
     setData({
       ...data,
       [e.target.name]: e.target.value,
@@ -58,7 +63,7 @@ const Login: React.FC = () => {
               <span className="text-primary">Care</span>
             </h2>
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
-              Welcome Back!
+              Create Account!
             </h1>
           </div>
           <fieldset className="fieldset flex flex-col w-full max-w-sm shrink-0">
@@ -66,6 +71,14 @@ const Login: React.FC = () => {
               onSubmit={handleSubmit}
               className="fieldset flex flex-col w-full max-w-sm shrink-0"
             >
+              <input
+                type="text"
+                name="name"
+                className="input mb-3 w-full"
+                placeholder="Name"
+                onChange={handleChange}
+                required
+              />
               <input
                 type="email"
                 name="email"
@@ -82,26 +95,36 @@ const Login: React.FC = () => {
                 onChange={handleChange}
                 required
               />
-              <div className="self-end">
-                <div
-                  onClick={() => navigate("/forgot-password")}
-                  className="hover:text-primary cursor-pointer"
-                >
-                  Forgot password?
-                </div>
-              </div>
-
+              <select
+                defaultValue="Pick a Role"
+                className="select select-bordered w-full"
+                name="role"
+                value={selectedRole}
+                onChange={handleChange}
+              >
+                <option disabled={true}>Pick a Role</option>
+                {Object.values(Role).map((role) => (
+                  <option key={role} value={role}>
+                    {role}
+                  </option>
+                ))}
+              </select>
               <button
                 type="submit"
                 className="btn btn-primary mt-2"
                 disabled={isLoading}
               >
-                {isLoading ? <LoadingButton text="Logging in" /> : "Login"}
+                {isLoading ? <LoadingButton text="Signing up" /> : "Register"}
               </button>
               <div>
                 <p className="text-center text-[1rem] mt-4">
-                  Don't have an account?{" "}
-                  <span className="text-primary cursor-pointer">Sign up</span>
+                  Already have an account?{" "}
+                  <span
+                    onClick={() => navigate("/login")}
+                    className="text-primary cursor-pointer"
+                  >
+                    Login
+                  </span>
                 </p>
               </div>
             </form>
@@ -112,4 +135,4 @@ const Login: React.FC = () => {
   );
 };
 
-export default Login;
+export default Register;

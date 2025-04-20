@@ -1,36 +1,66 @@
 import React, { useState } from "react";
-import { growl } from "../utils/growl";
+import { growl } from "../../utils/growl";
 import axios from "axios";
-import LoadingButton from "../components/LoadingButton";
+import { useNavigate, useParams } from "react-router-dom";
+import LoadingButton from "../../components/LoadingButton";
 
-const ForgotPassword: React.FC = () => {
-  const [email, setEmail] = useState<string>("");
+interface IResetData {
+  password: string;
+  confirmPassword: string;
+  userId: string;
+  resetString: string;
+}
+
+const ResetPassword: React.FC = () => {
+  const navigate = useNavigate();
+  const params = useParams();
   const [isLoading, setIsloading] = useState<boolean>(false);
+  const [data, setData] = useState<IResetData>({
+    password: "",
+    confirmPassword: "",
+    userId: params.id!,
+    resetString: params.resetString!,
+  });
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
 
     try {
       setIsloading(true);
-      const response = await axios.get(
-        `http://localhost:5500/api/auth/forgotPassword/${email}`
+      const response: any = await axios.post(
+        "http://localhost:5500/api/auth/resetPassword",
+        data,
+        { withCredentials: true }
       );
 
       const result = response.data;
 
       if (result.success) {
-        setEmail("");
+        setData({
+          password: "",
+          confirmPassword: "",
+          userId: "",
+          resetString: "",
+        });
+        navigate("/login");
         growl(result.message, "success");
       } else {
         growl(result.message, "error");
       }
     } catch (error: any) {
       setIsloading(true);
-      console.error("Retrieval Email could not be sent:", error);
+      console.error("Password reset failed:", error);
       growl(error.message, "error");
     } finally {
       setIsloading(false);
     }
+  };
+
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
   };
 
   return (
@@ -43,7 +73,7 @@ const ForgotPassword: React.FC = () => {
               <span className="text-primary">Care</span>
             </h2>
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
-              Retrieval Email
+              Reset Password
             </h1>
           </div>
           <fieldset className="fieldset flex flex-col w-full max-w-sm shrink-0">
@@ -52,11 +82,19 @@ const ForgotPassword: React.FC = () => {
               className="fieldset flex flex-col w-full max-w-sm shrink-0"
             >
               <input
-                type="email"
-                name="email"
+                type="password"
+                name="password"
                 className="input mb-3 w-full"
-                placeholder="Email"
-                onChange={(e) => setEmail(e.target.value)}
+                placeholder="New Password"
+                onChange={handleChange}
+                required
+              />
+              <input
+                type="password"
+                name="confirmPassword"
+                className="input mb-3 w-full"
+                placeholder="Confirm Password"
+                onChange={handleChange}
                 required
               />
               <button
@@ -64,11 +102,7 @@ const ForgotPassword: React.FC = () => {
                 className="btn btn-primary mt-2"
                 disabled={isLoading}
               >
-                {isLoading ? (
-                  <LoadingButton text="Sending mail" />
-                ) : (
-                  "Send Email"
-                )}
+                {isLoading ? <LoadingButton text="Logging in" /> : "Login"}
               </button>
             </form>
           </fieldset>
@@ -78,4 +112,4 @@ const ForgotPassword: React.FC = () => {
   );
 };
 
-export default ForgotPassword;
+export default ResetPassword;
