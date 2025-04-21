@@ -58,7 +58,7 @@ export const NavigationPanel = () => {
             open ? "translate-x-0" : "-translate-x-full"
           } lg:translate-x-0 lg:relative`}
       >
-        <div className="mb-4">
+        <div className="mb-4 lg:mb-0">
           <div
             className="btn btn-ghost btn-circle hover:bg-base-100 lg:hidden"
             tabIndex={0}
