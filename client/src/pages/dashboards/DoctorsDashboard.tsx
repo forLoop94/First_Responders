@@ -8,7 +8,6 @@ import { SiWebmoney } from "react-icons/si";
 import { FiHelpCircle } from "react-icons/fi";
 import { IoSettingsOutline } from "react-icons/io5";
 import Logo from "../../components/Logo";
-import Indicator from "../../components/Indicator";
 
 const DoctorsDashboard: React.FC = () => {
   const location = useLocation();
@@ -38,13 +37,7 @@ const DoctorsDashboard: React.FC = () => {
       >
         <SlCalender />
         Appointments
-        <div className="absolute right-2">
-          <Indicator
-            textCol="text-secondary-content"
-            bgCol="bg-secondary"
-            value={6}
-          />
-        </div>
+        <div className="badge badge-secondary badge-xs">+99</div>
       </Link>
       <Link
         to="#"

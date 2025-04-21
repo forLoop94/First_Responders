@@ -4,7 +4,10 @@ import DoctorsDashboard from "../pages/dashboards/DoctorsDashboard";
 import PatientsDashboard from "../pages/dashboards/PatientsDashboard";
 import { RiLogoutCircleRLine } from "react-icons/ri";
 import { TfiMenuAlt } from "react-icons/tfi";
-import { GrFormClose } from "react-icons/gr";
+import { RiCloseLargeFill } from "react-icons/ri";
+import Logo from "./Logo";
+import Search from "./Search";
+import NotificationBell from "./NotificationBell";
 
 export const NavigationPanel = () => {
   const [open, setOpen] = useState(false);
@@ -23,10 +26,31 @@ export const NavigationPanel = () => {
 
   return (
     <>
-      <div className="absolute top-2 left-2 lg:hidden p-2">
-        <button onClick={() => setOpen(true)} aria-label="Open Menu">
-          <TfiMenuAlt className="text-2xl" />
-        </button>
+      <div
+        className={`p-3 flex fixed top-0 left-0 h-16 w-full align-center bg-base-100 transform transition-transform duration-300 ${
+          !open ? "translate-y-0" : "-translate-y-full"
+        } shadow-sm lg:hidden`}
+      >
+        <div className="navbar-start">
+          <div
+            className="btn btn-ghost btn-circle"
+            tabIndex={0}
+            role="button"
+            onClick={() => setOpen(true)}
+            aria-label="Open Menu"
+          >
+            <TfiMenuAlt className="text-2xl" />
+          </div>
+        </div>
+        <div className="navbar-center">
+          <a className="btn btn-ghost text-xl pt-5">
+            <Logo />
+          </a>
+        </div>
+        <div className="navbar-end">
+          <Search />
+          <NotificationBell />
+        </div>
       </div>
       <aside
         className={`fixed top-0 left-0 h-screen bg-base-200 border-r-1 border-r-base-100 p-4 w-45 z-50 transform transition-transform duration-300 
@@ -34,16 +58,17 @@ export const NavigationPanel = () => {
             open ? "translate-x-0" : "-translate-x-full"
           } lg:translate-x-0 lg:relative`}
       >
-        <div className="flex justify-between items-center mb-4">
-          <button
-            className="lg:hidden"
+        <div className="mb-4">
+          <div
+            className="btn btn-ghost btn-circle hover:bg-base-100 lg:hidden"
+            tabIndex={0}
+            role="button"
             onClick={() => setOpen(false)}
             aria-label="Close Menu"
           >
-            <GrFormClose />
-          </button>
+            <RiCloseLargeFill className="text-2xl" />
+          </div>
         </div>
-
         <nav>
           {renderRoleNav()}
           <button className="btn btn-sm w-full justify-start mt-24 flex gap-2 hover:bg-base-100">
