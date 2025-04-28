@@ -1,8 +1,8 @@
 import React from "react";
 import { GiMagicPalm } from "react-icons/gi";
-import SearchInput from "./SearchInput";
 import NotificationBell from "./NotificationBell";
 import { FiChevronDown } from "react-icons/fi";
+import SearchInput from "./SearchInput";
 
 const DashboardHeader: React.FC = () => {
   return (
@@ -19,7 +19,9 @@ const DashboardHeader: React.FC = () => {
             </p>
           </div>
         </div>
-        <SearchInput dimension="sm" display="hidden" />
+        <div className="w-1/3">
+          <SearchInput />
+        </div>
         <div className="hidden lg:flex">
           <NotificationBell />
           <div
