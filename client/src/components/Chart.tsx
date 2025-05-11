@@ -102,7 +102,7 @@ const ScoreLineChart = () => {
   };
 
   return (
-    <div className="card card-border bg-base-100 h-64">
+    <div className="card card-border bg-base-100">
       <div className="card-body">
         <Line data={chartData} options={options} />
       </div>
