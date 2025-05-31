@@ -4,6 +4,7 @@ import dotenv from "dotenv";
 import { useCors } from "./utils/cors";
 import userRouter from "./routes/api/user";
 import authRouter from "./routes/api/auth";
+import doctorRouter from "./routes/api/doctor";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -20,3 +21,4 @@ app.listen(process.env.PORT, () => {
 
 app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
+app.use("/api/doctors", doctorRouter);
