@@ -87,9 +87,9 @@ const DoctorsDashboard: React.FC = () => {
         Help & Support
       </Link>
       <Link
-        to="#"
+        to="/settings"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/#"
+          "/seetings"
         )}`}
       >
         <IoSettingsOutline />

@@ -13,6 +13,7 @@ import ResetPassword from "./pages/auth/ResetPassword";
 import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
+import Settings from "./pages/Settings";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -20,6 +21,7 @@ const router = createBrowserRouter(
       <Route path="/" element={<Root />}>
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="appointments" element={<Appointments />} />
+        <Route path="settings" element={<Settings />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
