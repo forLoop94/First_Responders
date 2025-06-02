@@ -7,6 +7,10 @@ import authRouter from "./routes/api/auth";
 import doctorRouter from "./routes/api/doctor";
 import patientRouter from "./routes/api/patient";
 import appointmentRouter from "./routes/api/appointment";
+import medicationRouter from "./routes/api/medication";
+import invoicesRouter from "./routes/api/invoice";
+import expensesRouter from "./routes/api/expense";
+import prescriptionsRouter from "./routes/api/prescription";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -26,3 +30,7 @@ app.use("/api/auth", authRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/patients", patientRouter);
 app.use("/api/appointments", appointmentRouter);
+app.use("/api/medications", medicationRouter);
+app.use("/api/invoices", invoicesRouter);
+app.use("/api/expenses", expensesRouter);
+app.use("/api/prescriptions", prescriptionsRouter);
