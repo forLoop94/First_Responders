@@ -4,7 +4,7 @@ import {
   getUser,
   getUsers,
   userImageUpload,
-} from "../../controllers/user/userController";
+} from "../../controllers/users/userController";
 import { authenticateToken } from "../../middlewares/authenticateToken";
 import { authorizeRoles } from "../../middlewares/authorizeRoles";
 import upload from "../../middlewares/multer";

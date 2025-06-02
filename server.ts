@@ -6,6 +6,7 @@ import userRouter from "./routes/api/user";
 import authRouter from "./routes/api/auth";
 import doctorRouter from "./routes/api/doctor";
 import patientRouter from "./routes/api/patient";
+import appointmentRouter from "./routes/api/appointment";
 import cookieParser from "cookie-parser";
 
 dotenv.config();
@@ -24,3 +25,4 @@ app.use("/api/users", userRouter);
 app.use("/api/auth", authRouter);
 app.use("/api/doctors", doctorRouter);
 app.use("/api/patients", patientRouter);
+app.use("/api/appointments", appointmentRouter);
