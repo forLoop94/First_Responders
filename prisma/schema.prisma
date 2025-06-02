@@ -24,6 +24,11 @@ model User {
   createdAt    DateTime @default(now())
   updatedAt    DateTime @updatedAt
   isVerified   Boolean  @default(false)
+
+  prescribedMedications Prescription[] @relation("PrescribedMedications")
+  issuedMedications     Prescription[] @relation("IssuedMedications")
+  patients              Prescription[] @relation("patients")
+  Expenses              Expenses[]
 }
 
 model UserVerification {
@@ -42,7 +47,62 @@ model PasswordReset {
   expiresAt   DateTime
 }
 
+model Appointment {
+  id      String   @id @default(uuid())
+  title   String
+  start   DateTime
+  end     DateTime
+  type    String
+  tooltip String
+}
+
+model Expenses {
+  id             String   @id @default(uuid())
+  title          String
+  amount         Int
+  date           DateTime
+  authorizedBy   User?    @relation(fields: [authorizedById], references: [id])
+  authorizedById String?
+}
+
+model Invoice {
+  id           String @id @default(uuid())
+  uniqueString String @unique
+  billables    Json
+  amount       Int
+  quantity     Int
+}
+
+model Medication {
+  id             String         @id @default(uuid())
+  name           String         @unique
+  manufacturer   String
+  price          Int
+  prescriptions  Prescription[] @relation("PrescriptionMedications")
+  prescriptionId String?
+}
+
+model Prescription {
+  id               String   @id @default(uuid())
+  uniqueString     String   @unique
+  prescriptionDate DateTime
+  issueDate        DateTime
+  prescribedById   String?
+  issuedById       String?
+  patientId        String?
+
+  prescribedBy User?        @relation("PrescribedMedications", fields: [prescribedById], references: [id])
+  issuedBy     User?        @relation("IssuedMedications", fields: [issuedById], references: [id])
+  patient      User?        @relation("patients", fields: [patientId], references: [id])
+  medications  Medication[] @relation("PrescriptionMedications")
+
+  @@index([prescribedById])
+  @@index([issuedById])
+}
+
 enum Role {
   DOCTOR
   PATIENT
+  PHARMACIST
+  NURSE
 }

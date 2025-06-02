@@ -36,8 +36,8 @@ export const registerUser = async (req: Request, res: Response) => {
       data: { name, email, password: hashedPassword, role },
     });
 
-    //sendSuccess(res, "User succesfully created", newUser, 201);
-    sendVerificationEmail(newUser, res);
+    sendSuccess(res, "User succesfully created", newUser, 201);
+    //sendVerificationEmail(newUser, res);
   } catch (error) {
     console.error("Registration error:", error);
     return sendError(res, "An error occurred during user registration.");
