@@ -110,6 +110,4 @@ const ScoreLineChart = () => {
   );
 };
 
-// p-4 rounded-lg shadow-md h-96
-
 export default ScoreLineChart;

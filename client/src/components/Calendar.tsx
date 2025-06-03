@@ -1,119 +1,13 @@
-// // VisitCalendar.jsx
-// import { Calendar, dateFnsLocalizer } from "react-big-calendar";
-// import { format } from "date-fns/format";
-// import { parse } from "date-fns/parse";
-// import { startOfWeek } from "date-fns/startOfWeek";
-// import { getDay } from "date-fns/getDay";
-// import "react-big-calendar/lib/css/react-big-calendar.css";
-// import { useEffect, useState } from "react";
-// // import ReactTooltip from "react-tooltip";
-// import { Tooltip } from "react-tooltip";
-// import "react-tooltip/dist/react-tooltip.css";
-// import { enUS } from "date-fns/locale/en-US";
-
-// const locales = {
-//   "en-US": enUS,
-// };
-
-// const localizer = dateFnsLocalizer({
-//   format,
-//   parse,
-//   startOfWeek,
-//   getDay,
-//   locales,
-// });
-
-// export default function VisitCalendar() {
-//   const [events, setEvents] = useState([
-//     {
-//       title: "Doctor Visit",
-//       start: new Date("2025-05-18"),
-//       end: new Date("2025-05-20"),
-//       type: "doctor",
-//       tooltip: "Dr. James with patient Mike",
-//     },
-//     {
-//       title: "Nurse Visit",
-//       start: new Date("2025-05-23"),
-//       end: new Date("2025-05-23"),
-//       type: "nurse",
-//       tooltip: "Nurse Dianne with patient Chris",
-//     },
-//   ]);
-
-//   // useEffect(() => {
-//   //   // Fetch visit schedule from your API
-//   //   fetch('/api/visits')
-//   //     .then((res) => res.json())
-//   //     .then((data) => {
-//   //       const transformed = data.map((visit) => ({
-//   //         title: visit.title,
-//   //         start: new Date(visit.date), // or visit.startDate
-//   //         end: new Date(visit.date),   // assuming one-day visits
-//   //         type: visit.type,            // 'doctor' or 'nurse'
-//   //         tooltip: visit.tooltip,      // visit summary or patient name
-//   //       }))
-//   //       setEvents(transformed)
-//   //     })
-//   // }, [])
-
-//   const eventStyleGetter = (event: any) => {
-//     const backgroundColor = event.type === "doctor" ? "#007bff" : "#e83e8c";
-//     return {
-//       style: {
-//         backgroundColor,
-//         borderRadius: "6px",
-//         color: "white",
-//         border: "none",
-//         padding: "4px",
-//       },
-//     };
-//   };
-
-//   return (
-//     <div>
-//       <Calendar
-//         localizer={localizer}
-//         events={events}
-//         startAccessor="start"
-//         endAccessor="end"
-//         style={{ height: 500 }}
-//         eventPropGetter={eventStyleGetter}
-//         defaultView="month"
-//         views={["month", "week", "day", "agenda"]}
-//         defaultDate={new Date()}
-//         toolbar={true}
-//         tooltipAccessor={null} // We'll use custom tooltips
-//         components={{
-//           event: ({ event }) => (
-//             // <div data-tip={event.tooltip}>
-//             //   {event.title}
-//             //   <ReactTooltip place="top" type="dark" effect="solid" />
-//             // </div>
-//             <>
-//               <div
-//                 data-tooltip-id={`tooltip-${event.title}`}
-//                 data-tooltip-content={event.tooltip}
-//               >
-//                 {event.title}
-//               </div>
-//               <Tooltip id={`tooltip-${event.title}`} place="top" />
-//             </>
-//           ),
-//         }}
-//       />
-//     </div>
-//   );
-// }
-
 import { Calendar, dateFnsLocalizer, View } from "react-big-calendar";
 import { format, parse, startOfWeek, getDay } from "date-fns";
 import { enUS } from "date-fns/locale/en-US";
 import "react-big-calendar/lib/css/react-big-calendar.css";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Tooltip } from "react-tooltip";
 import "react-tooltip/dist/react-tooltip.css";
 import type { Event as RBCEvent } from "react-big-calendar";
+import axios from "axios";
+import { growl } from "../utils/growl";
 
 const locales = {
   "en-US": enUS,
@@ -189,23 +83,8 @@ function CustomToolbar(props: {
   );
 }
 
-export default function VisitCalendar() {
-  const [events] = useState<VisitEvent[]>([
-    {
-      title: "Doctor Visit",
-      start: new Date("2025-05-18"),
-      end: new Date("2025-05-20"),
-      type: "doctor",
-      tooltip: "Dr. James with patient Mike",
-    },
-    {
-      title: "Nurse Visit",
-      start: new Date("2025-05-23"),
-      end: new Date("2025-05-23"),
-      type: "nurse",
-      tooltip: "Nurse Dianne with patient Chris",
-    },
-  ]);
+const VisitCalendar = () => {
+  const [events, setEvents] = useState<VisitEvent[]>();
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState<View>("month");
 
@@ -221,6 +100,39 @@ export default function VisitCalendar() {
         padding: "4px",
       },
     };
+  };
+
+  useEffect(() => {
+    getAppointments();
+  }, []);
+
+  const getAppointments = async () => {
+    try {
+      const response = await axios.get(
+        "http://localhost:5500/api/appointments",
+        {
+          withCredentials: true,
+        }
+      );
+
+      const result = response.data;
+
+      if (result.success) {
+        const parsed = result.data.map((e: any) => ({
+          ...e,
+          start: new Date(e.start),
+          end: new Date(e.end),
+          type: e.type.toLowerCase(),
+        }));
+        setEvents(parsed);
+        console.log("user fetch response:", events);
+        growl(result.message, "success");
+      } else {
+        growl(result.message, "error");
+      }
+    } catch (error) {
+      console.log("Error:", error);
+    }
   };
 
   const onNavigate = (newDate: Date | "PREV" | "NEXT" | "TODAY") => {
@@ -297,4 +209,6 @@ export default function VisitCalendar() {
       />
     </div>
   );
-}
+};
+
+export default VisitCalendar;

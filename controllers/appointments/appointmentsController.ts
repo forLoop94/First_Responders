@@ -28,3 +28,18 @@ export const getAppointments = async (
     sendError(res, "Something went wrong while fetching appointments.");
   }
 };
+
+export const createAppointment = async (req: Request, res: Response) => {
+  try {
+    const { title, start, end, type, tooltip } = req.body;
+
+    const newAppointment = { title, start, end, type, tooltip };
+
+    const user = await prisma.appointment.create({ data: newAppointment });
+
+    sendSuccess(res, "appointments created successfully.", newAppointment);
+  } catch (error) {
+    console.error("Error creating user:", error);
+    sendError(res, "Something went wrong creating appointments.");
+  }
+};
