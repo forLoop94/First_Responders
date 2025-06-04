@@ -8,6 +8,8 @@ import "react-tooltip/dist/react-tooltip.css";
 import type { Event as RBCEvent } from "react-big-calendar";
 import axios from "axios";
 import { growl } from "../utils/growl";
+import Modal from "./Modal";
+import LoadingButton from "./LoadingButton";
 
 const locales = {
   "en-US": enUS,
@@ -17,6 +19,12 @@ type VisitEvent = RBCEvent & {
   type: "doctor" | "nurse";
   tooltip: string;
 };
+
+interface IAppointmentData {
+  title: string;
+  type: string;
+  tooltip: string;
+}
 
 const localizer = dateFnsLocalizer({
   format,
@@ -87,6 +95,15 @@ const VisitCalendar = () => {
   const [events, setEvents] = useState<VisitEvent[]>();
   const [date, setDate] = useState(new Date());
   const [view, setView] = useState<View>("month");
+  const [start, setStart] = useState<Date | null>(null);
+  const [end, setEnd] = useState<Date | null>(null);
+  const [isLoading, setIsLoading] = useState<boolean>(false);
+  const [data, setData] = useState<IAppointmentData>({
+    title: "",
+    type: "",
+    tooltip: "",
+  });
+  const [showModal, setShowModal] = useState<boolean>(false);
 
   const eventStyleGetter = (event: VisitEvent) => {
     const backgroundColor =
@@ -168,6 +185,58 @@ const VisitCalendar = () => {
     setView(newView);
   };
 
+  const handleSelectSlot = ({ start, end }: { start: Date; end: Date }) => {
+    setStart(start);
+    setEnd(end);
+    setShowModal(true);
+  };
+
+  const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+    e.preventDefault();
+
+    const appointmentPayload = {
+      title: data.title,
+      start: start,
+      end: end,
+      type: data.type,
+      tooltip: data.tooltip,
+    };
+
+    console.log(appointmentPayload);
+
+    try {
+      setIsLoading(true);
+      const response: any = await axios.post(
+        "http://localhost:5500/api/appointments",
+        appointmentPayload
+      );
+
+      const result = response.data;
+
+      if (result.success) {
+        setShowModal(false);
+        getAppointments();
+        growl(result.message, "success");
+      } else {
+        growl(result.message, "error");
+      }
+    } catch (error: any) {
+      setIsLoading(true);
+      growl(error.message, "error");
+    } finally {
+      setIsLoading(false);
+    }
+  };
+
+  const handleChange = (
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+  ) => {
+    setData({
+      ...data,
+      [e.target.name]: e.target.value,
+    });
+  };
+
   return (
     <div>
       <Calendar
@@ -180,6 +249,8 @@ const VisitCalendar = () => {
         onView={onView}
         date={date}
         onNavigate={onNavigate}
+        selectable
+        onSelectSlot={handleSelectSlot}
         eventPropGetter={eventStyleGetter}
         components={{
           toolbar: CustomToolbar,
@@ -207,6 +278,54 @@ const VisitCalendar = () => {
           agenda: true,
         }}
       />
+      {showModal && (
+        <Modal onClose={() => setShowModal(false)}>
+          <fieldset className="fieldset flex flex-col w-full max-w-sm shrink-0">
+            <form
+              onSubmit={handleSubmit}
+              className="fieldset flex flex-col w-full max-w-sm shrink-0"
+            >
+              <input
+                type="text"
+                name="title"
+                className="input mb-3 w-full"
+                placeholder="Appointment Title"
+                onChange={handleChange}
+                required
+              />
+              <select
+                defaultValue="Who do you have an appointment with?"
+                name="type"
+                id="appointment-type"
+                className="input mb-2 w-full"
+                onChange={handleChange}
+                required
+              >
+                <option disabled={true}>
+                  Who do you have an appointment with?
+                </option>
+                <option value="doctor">Doctor</option>
+                <option value="nurse">Nurse</option>
+              </select>
+              <input
+                type="text"
+                name="tooltip"
+                className="input mb-2 w-full"
+                placeholder="Summary"
+                onChange={handleChange}
+                required
+              />
+              <button
+                type="submit"
+                className="btn btn-primary mt-2"
+                disabled={isLoading}
+              >
+                {isLoading ? <LoadingButton text="Processing..." /> : "Add"}
+              </button>
+            </form>
+          </fieldset>
+        </Modal>
+      )}
     </div>
   );
 };

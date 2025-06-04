@@ -19,7 +19,6 @@ const Register: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-    console.log(data);
 
     try {
       setIsLoading(true);
