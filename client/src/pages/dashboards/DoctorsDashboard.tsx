@@ -40,9 +40,9 @@ const DoctorsDashboard: React.FC = () => {
         <div className="badge badge-secondary badge-xs">+99</div>
       </Link>
       <Link
-        to="#"
+        to="/patients"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "#"
+          "/patients"
         )}`}
       >
         <TbWheelchair />

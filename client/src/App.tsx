@@ -14,6 +14,7 @@ import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Settings from "./pages/Settings";
+import Patients from "./pages/Patients";
 
 const router = createBrowserRouter(
   createRoutesFromElements(
@@ -22,6 +23,7 @@ const router = createBrowserRouter(
         <Route path="dashboard" element={<Dashboard />} />
         <Route path="appointments" element={<Appointments />} />
         <Route path="settings" element={<Settings />} />
+        <Route path="patients" element={<Patients />} />
       </Route>
       <Route path="/login" element={<Login />} />
       <Route path="/register" element={<Register />} />
