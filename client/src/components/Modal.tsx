@@ -1,7 +1,7 @@
 import React, { ReactNode } from "react";
 
 interface ModalProps {
-  onClose: () => void;
+  onClose?: () => void;
   children: ReactNode;
 }
 
@@ -10,11 +10,13 @@ const Modal: React.FC<ModalProps> = ({ onClose, children }) => {
     <div className="modal modal-open">
       <div className="modal-box">
         {children}
-        <div className="modal-action">
-          <button className="btn" onClick={onClose}>
-            Close
-          </button>
-        </div>
+        {onClose && (
+          <div className="modal-action">
+            <button className="btn" onClick={onClose}>
+              Close
+            </button>
+          </div>
+        )}
       </div>
     </div>
   );

@@ -8,7 +8,11 @@ export const getExpenses = async (
   res: Response
 ): Promise<void> => {
   try {
-    const expenses = await prisma.expenses.findMany();
+    const expenses = await prisma.expenses.findMany({
+      include: {
+        authorizedBy: true,
+      },
+    });
 
     if (!expenses || expenses.length === 0) {
       sendSuccess(res, "No expenses found.");
