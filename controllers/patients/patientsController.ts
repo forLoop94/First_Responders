@@ -30,3 +30,26 @@ export const getpatients = async (
     sendError(res, "Something went wrong while fetching patients.");
   }
 };
+
+export const updatePatients = async (req: Request, res: Response) => {
+  const updates = req.body;
+  const { id } = req.params;
+
+  const user = await prisma.user.findFirst({
+    where: {
+      id: id,
+    },
+  });
+
+  if (!user) {
+    sendError(res, "User not found", 404);
+    return;
+  }
+
+  const updatedUser = await prisma.user.update({
+    where: { id: id },
+    data: updates,
+  });
+
+  res.status(200).json(updatedUser);
+};

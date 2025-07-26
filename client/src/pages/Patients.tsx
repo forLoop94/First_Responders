@@ -1,81 +1,32 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import TableListApi from "../components/TableListApi";
 import { ITableHeader } from "../interfaces/i-table-headers";
 import { GoTrash } from "react-icons/go";
 import { LiaEditSolid } from "react-icons/lia";
 import Modal from "../components/Modal";
+import { getPatients } from "../services/patients-service";
 
 const Patients = () => {
   const headers: ITableHeader[] = [
     { id: "name", value: "name", label: "Name" },
-    { id: "job", value: "job", label: "Job" },
-    { id: "company", value: "company", label: "Company" },
-    { id: "location", value: "location", label: "Location" },
-    { id: "lastLogin", value: "lastLogin", label: "Last Login" },
-    { id: "favoriteColor", value: "favCol", label: "Favorite Color" },
+    { id: "email", value: "email", label: "Email" },
+    { id: "isVerified", value: "isVerified", label: "Verification Status" },
+    { id: "role", value: "role", label: "Role" },
   ];
-
-  const data = [
-    {
-      id: "1",
-      name: "Marjy Ferencz",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-    {
-      id: "2",
-      name: "Chris Cavaneigh",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-    {
-      id: "3",
-      name: "Michael Balanz",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-    {
-      id: "4",
-      name: "Florida macron",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-    {
-      id: "5",
-      name: "Bull Binance",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-    {
-      id: "6",
-      name: "Angela Microvic",
-      job: "Office Assistant I",
-      company: "Rowe-Schoen",
-      location: "Russia",
-      lastLogin: "3/25/2021",
-      favCol: "Crimson",
-    },
-  ];
-
-  const [tableData, setTableData] = useState<any>(data);
+  const [tableData, setTableData] = useState<any>([]);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
 
   const isActionColumnRequested = true;
+
+  useEffect(() => {
+    allPatients();
+  }, []);
+
+  const allPatients = async () => {
+    const response = await getPatients();
+    setTableData(response);
+    console.log("testD", response);
+  };
 
   const handleConfirmDelete = (id: string) => {
     let newData = tableData.filter((data: any) => data.id !== id);
@@ -116,8 +67,6 @@ const Patients = () => {
               <td>{item[headers[1].value]}</td>
               <td>{item[headers[2].value]}</td>
               <td>{item[headers[3].value]}</td>
-              <td>{item[headers[4].value]}</td>
-              <td>{item[headers[5].value]}</td>
               {isActionColumnRequested ? (
                 <td>
                   <div className="flex">
