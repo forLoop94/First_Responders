@@ -27,7 +27,7 @@ const Login: React.FC = () => {
       const result = response.data;
 
       if (result.success) {
-        navigate("/");
+        navigate("/dashboard");
         growl(result.message, "success");
       } else {
         navigate("/login");

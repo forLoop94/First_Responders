@@ -30,9 +30,9 @@ const DoctorsDashboard: React.FC = () => {
       </Link>
 
       <Link
-        to="/appointments"
+        to="/dashboard/appointments"
         className={`btn relative btn-sm btn-ghost w-full justify-start hover:bg-base-100 ${isActive(
-          "/appointments"
+          "/dashboard/appointments"
         )}`}
       >
         <SlCalender />
@@ -40,9 +40,9 @@ const DoctorsDashboard: React.FC = () => {
         <div className="badge badge-secondary badge-xs">+99</div>
       </Link>
       <Link
-        to="/patients"
+        to="/dashboard/patients"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/patients"
+          "/dashboard/patients"
         )}`}
       >
         <TbWheelchair />
@@ -87,9 +87,9 @@ const DoctorsDashboard: React.FC = () => {
         Help & Support
       </Link>
       <Link
-        to="/settings"
+        to="/dashboard/settings"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/seetings"
+          "/dashboard/settings"
         )}`}
       >
         <IoSettingsOutline />

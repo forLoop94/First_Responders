@@ -15,26 +15,59 @@ import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Settings from "./pages/Settings";
 import Patients from "./pages/Patients";
+import Landing from "./pages/Landing";
+import HomeLayout from "./pages/HomeLayout";
 
-const router = createBrowserRouter(
-  createRoutesFromElements(
-    <Route>
-      <Route path="/" element={<Root />}>
-        <Route path="dashboard" element={<Dashboard />} />
-        <Route path="appointments" element={<Appointments />} />
-        <Route path="settings" element={<Settings />} />
-        <Route path="patients" element={<Patients />} />
-      </Route>
-      <Route path="/login" element={<Login />} />
-      <Route path="/register" element={<Register />} />
-      <Route path="/forgot-password" element={<ForgotPassword />} />
-      <Route
-        path="/reset-password/:id/:resetString"
-        element={<ResetPassword />}
-      />
-    </Route>
-  )
-);
+const router = createBrowserRouter([
+  {
+    path: "/",
+    element: <HomeLayout />,
+    children: [
+      {
+        index: true,
+        element: <Landing />,
+      },
+      {
+        path: "register",
+        element: <Register />,
+      },
+      {
+        path: "login",
+        element: <Login />,
+      },
+      {
+        path: "forgot-password",
+        element: <ForgotPassword />,
+      },
+      {
+        path: "reset-password/:id/:resetString",
+        element: <ResetPassword />,
+      },
+      {
+        path: "dashboard",
+        element: <Root />,
+        children: [
+          {
+            index: true,
+            element: <Dashboard />,
+          },
+          {
+            path: "appointments",
+            element: <Appointments />,
+          },
+          {
+            path: "settings",
+            element: <Settings />,
+          },
+          {
+            path: "patients",
+            element: <Patients />,
+          },
+        ],
+      },
+    ],
+  },
+]);
 
 const App = () => (
   <>
