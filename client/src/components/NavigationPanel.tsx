@@ -8,8 +8,12 @@ import { RiCloseLargeFill } from "react-icons/ri";
 import Logo from "./Logo";
 import Search from "./Search";
 import NotificationBell from "./NotificationBell";
+import { growl } from "../utils/growl";
+import { logoutAPI } from "../services/auth-service";
+import { useNavigate } from "react-router-dom";
 
 export const NavigationPanel = () => {
+  const navigate = useNavigate();
   const [open, setOpen] = useState(false);
   const [role, setRole] = useState<Role>(Role.Doctor);
 
@@ -21,6 +25,21 @@ export const NavigationPanel = () => {
         return <PatientsDashboard />;
       default:
         return null;
+    }
+  };
+
+  const logout = async () => {
+    try {
+      const response = await logoutAPI();
+      if (response.success) {
+        navigate("/login");
+        growl(response.message, "success");
+      } else {
+        growl(response.message, "error");
+      }
+    } catch (error: any) {
+      console.error("Logout failed:", error);
+      growl(error.message, "error");
     }
   };
 
@@ -71,7 +90,10 @@ export const NavigationPanel = () => {
         </div>
         <nav>
           {renderRoleNav()}
-          <button className="btn btn-sm w-full justify-start mt-24 flex gap-2 hover:bg-base-100">
+          <button
+            className="btn btn-sm w-full justify-start mt-24 flex gap-2 hover:bg-base-100"
+            onClick={logout}
+          >
             <RiLogoutCircleRLine className="mt-1" />
             Log Out
           </button>
