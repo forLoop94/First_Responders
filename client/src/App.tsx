@@ -1,9 +1,4 @@
-import {
-  createBrowserRouter,
-  createRoutesFromElements,
-  Route,
-  RouterProvider,
-} from "react-router-dom";
+import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import Login from "./pages/auth/Login";
 import Growl from "./components/Growler";
@@ -17,6 +12,8 @@ import Settings from "./pages/Settings";
 import Patients from "./pages/Patients";
 import Landing from "./pages/Landing";
 import HomeLayout from "./pages/HomeLayout";
+
+import { loader as rootLoader } from "./loaders/rootLoader";
 
 const router = createBrowserRouter([
   {
@@ -46,6 +43,7 @@ const router = createBrowserRouter([
       {
         path: "dashboard",
         element: <Root />,
+        loader: rootLoader,
         children: [
           {
             index: true,
