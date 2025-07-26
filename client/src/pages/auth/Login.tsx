@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../components/LoadingButton";
 import Logo from "../../components/Logo";
+import { loginAPI } from "../../services/auth-service";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -15,23 +16,15 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       setIsLoading(true);
-      const response: any = await axios.post(
-        "http://localhost:5500/api/auth/login",
-        data,
-        { withCredentials: true }
-      );
-
-      const result = response.data;
-
-      if (result.success) {
+      const response = await loginAPI(data);
+      if (response.success) {
         navigate("/dashboard");
-        growl(result.message, "success");
+        growl(response.message, "success");
       } else {
         navigate("/login");
-        growl(result.message, "error");
+        growl(response.message, "error");
       }
     } catch (error: any) {
       setIsLoading(true);

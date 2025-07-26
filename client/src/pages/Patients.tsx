@@ -5,6 +5,7 @@ import { GoTrash } from "react-icons/go";
 import { LiaEditSolid } from "react-icons/lia";
 import Modal from "../components/Modal";
 import { getPatients } from "../services/patients-service";
+import { growl } from "../utils/growl";
 
 const Patients = () => {
   const headers: ITableHeader[] = [
@@ -23,9 +24,19 @@ const Patients = () => {
   }, []);
 
   const allPatients = async () => {
-    const response = await getPatients();
-    setTableData(response);
-    console.log("testD", response);
+    try {
+      const response = await getPatients();
+      if (response.success) {
+        growl(response.message, "success");
+      } else {
+        growl(response.message, "error");
+      }
+      setTableData(response.data);
+      console.log("testD", response);
+    } catch (error: any) {
+      console.error("Failed to fetch Patients:", error);
+      growl(error.message, "error");
+    }
   };
 
   const handleConfirmDelete = (id: string) => {
