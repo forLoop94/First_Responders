@@ -39,9 +39,8 @@ export const loader = async () => {
         console.log("holla:", refreshError);
 
         if (refreshError.response?.status === 401) {
-          redirect("/login");
           growl("Session expired. Login again", "info");
-          return;
+          return redirect("/login");
         }
         console.error("Token refresh failed", refreshError);
       }

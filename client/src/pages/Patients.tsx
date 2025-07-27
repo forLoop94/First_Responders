@@ -1,43 +1,22 @@
-import React, { useEffect, useState } from "react";
-import TableListApi from "../components/TableListApi";
+import React, { useState } from "react";
+// import TableListApi from "../components/TableListApi";
 import { ITableHeader } from "../interfaces/i-table-headers";
 import { GoTrash } from "react-icons/go";
 import { LiaEditSolid } from "react-icons/lia";
 import Modal from "../components/Modal";
-import { getPatients } from "../services/patients-service";
-import { growl } from "../utils/growl";
+import { useLoaderData } from "react-router-dom";
 
-const Patients = () => {
+const Patients: React.FC = () => {
+  const { data } = useLoaderData();
   const headers: ITableHeader[] = [
     { id: "name", value: "name", label: "Name" },
     { id: "email", value: "email", label: "Email" },
     { id: "isVerified", value: "isVerified", label: "Verification Status" },
     { id: "role", value: "role", label: "Role" },
   ];
-  const [tableData, setTableData] = useState<any>([]);
+  const [tableData, setTableData] = useState<any>(data);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
-
   const isActionColumnRequested = true;
-
-  useEffect(() => {
-    allPatients();
-  }, []);
-
-  const allPatients = async () => {
-    try {
-      const response = await getPatients();
-      if (response.success) {
-        growl(response.message, "success");
-      } else {
-        growl(response.message, "error");
-      }
-      setTableData(response.data);
-      console.log("testD", response);
-    } catch (error: any) {
-      console.error("Failed to fetch Patients:", error);
-      growl(error.message, "error");
-    }
-  };
 
   const handleConfirmDelete = (id: string) => {
     let newData = tableData.filter((data: any) => data.id !== id);

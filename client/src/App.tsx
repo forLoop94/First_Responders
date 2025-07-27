@@ -14,6 +14,7 @@ import Landing from "./pages/Landing";
 import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
+import { loader as patientsLoader } from "./loaders/patientsLoader";
 
 const router = createBrowserRouter([
   {
@@ -60,6 +61,7 @@ const router = createBrowserRouter([
           {
             path: "patients",
             element: <Patients />,
+            loader: patientsLoader,
           },
         ],
       },
