@@ -15,8 +15,8 @@ const PatientsDashboard: React.FC = () => {
         Dashboard
       </Link>
       <Link
-        to="/appointments"
-        className={`btn btn-ghost ${isActive("/appointments")}`}
+        to="/dashboard/appointments"
+        className={`btn btn-ghost ${isActive("/dashboard/appointments")}`}
       >
         Appointments
       </Link>

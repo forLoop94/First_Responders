@@ -1,10 +1,12 @@
-import React from "react";
+import React, { useContext } from "react";
 import { GiMagicPalm } from "react-icons/gi";
 import NotificationBell from "./NotificationBell";
 import { FiChevronDown } from "react-icons/fi";
 import SearchInput from "./SearchInput";
+import { UserContext } from "../pages/Root";
 
 const DashboardHeader: React.FC = () => {
+  const currentUser = useContext(UserContext);
   return (
     <div>
       <div className="flex w-full justify-between align-center">
@@ -38,10 +40,10 @@ const DashboardHeader: React.FC = () => {
           </div>
           <div className="dropdown dropdown-end flex flex-col ml-2">
             <div tabIndex={0} role="button" className="flex align-center">
-              <div className="text-xs mr-1">John Walker</div>
+              <div className="text-xs mr-1">{currentUser?.name}</div>
               <FiChevronDown className="hover:bg-base-100" />
             </div>
-            <small className="text-[0.6rem]">Admin</small>
+            <small className="text-[0.6rem]">{currentUser?.role}</small>
             <ul
               tabIndex={0}
               className="menu menu-sm dropdown-content bg-base-100 rounded-box z-1 mt-12 w-52 p-2 shadow"

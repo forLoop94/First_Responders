@@ -1,4 +1,3 @@
-import axios from "axios";
 import { growl } from "../utils/growl";
 import { redirect } from "react-router-dom";
 import { refreshToken } from "../services/auth-service";
@@ -10,6 +9,7 @@ export const loader = async () => {
     if (response.success) {
       console.log("Login response:", response);
       growl(response.message, "success");
+      return response.data;
     } else {
       growl(response.message, "error");
     }

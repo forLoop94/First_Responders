@@ -1,5 +1,4 @@
-import { useState } from "react";
-import { Role } from "../enums/auth/e-auth";
+import { useContext, useState } from "react";
 import DoctorsDashboard from "../pages/dashboards/DoctorsDashboard";
 import PatientsDashboard from "../pages/dashboards/PatientsDashboard";
 import { RiLogoutCircleRLine } from "react-icons/ri";
@@ -11,17 +10,18 @@ import NotificationBell from "./NotificationBell";
 import { growl } from "../utils/growl";
 import { logoutAPI } from "../services/auth-service";
 import { useNavigate } from "react-router-dom";
+import { UserContext } from "../pages/Root";
 
 export const NavigationPanel = () => {
   const navigate = useNavigate();
+  const currentUser = useContext(UserContext);
   const [open, setOpen] = useState(false);
-  const [role, setRole] = useState<Role>(Role.Doctor);
 
   const renderRoleNav = () => {
-    switch (role) {
-      case Role.Doctor:
+    switch (currentUser?.role) {
+      case "DOCTOR":
         return <DoctorsDashboard />;
-      case Role.Patient:
+      case "PATIENT":
         return <PatientsDashboard />;
       default:
         return null;
@@ -64,6 +64,7 @@ export const NavigationPanel = () => {
         <div className="navbar-center">
           <a className="btn btn-ghost text-xl pt-5">
             <Logo />
+            <p></p>
           </a>
         </div>
         <div className="navbar-end">
