@@ -9,3 +9,10 @@ export interface IUsers {
   updatedAt: Date;
   isVerified: boolean;
 }
+
+export interface ICurrentUser {
+  email: string;
+  id: string;
+  name: string;
+  role: string;
+}
