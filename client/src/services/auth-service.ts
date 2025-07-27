@@ -15,3 +15,14 @@ export const logoutAPI = async () => {
   });
   return response.data;
 };
+
+export const refreshToken = async () => {
+  const response = await axios.post(
+    `${base_URL}/refresh`,
+    {},
+    {
+      withCredentials: true,
+    }
+  );
+  return response.data;
+};
