@@ -13,7 +13,7 @@ const DashboardHeader: React.FC = () => {
         <div>
           <div className="text-sm">
             <b className="flex">
-              Hello, John Walker{" "}
+              Hello, {currentUser?.name}{" "}
               <GiMagicPalm className="text-secondary mt-1 ml-5" />
             </b>
             <p className="text-[0.6rem] tracking-widest">
@@ -32,10 +32,7 @@ const DashboardHeader: React.FC = () => {
             className="btn btn-ghost btn-circle avatar ml-10"
           >
             <div className="w-24 rounded-full">
-              <img
-                alt="profile image"
-                src="https://img.daisyui.com/images/stock/photo-1534528741775-53994a69daeb.webp"
-              />
+              <img alt="profile image" src={currentUser?.profileImage} />
             </div>
           </div>
           <div className="dropdown dropdown-end flex flex-col ml-2">

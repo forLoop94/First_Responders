@@ -15,4 +15,5 @@ export interface ICurrentUser {
   id: string;
   name: string;
   role: string;
+  profileImage: string;
 }

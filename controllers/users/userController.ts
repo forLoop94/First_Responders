@@ -72,6 +72,7 @@ export const getCurrentUser = async (
         name: true,
         email: true,
         role: true,
+        profileImage: true,
       },
     });
 
