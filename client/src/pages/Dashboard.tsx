@@ -3,6 +3,7 @@ import DashboardHeader from "../components/DashboardHeader";
 import Stat from "../components/Stat";
 import Card from "../components/Card";
 import ScoreLineChart from "../components/Chart";
+import Cally from "../components/Cally";
 
 const Dashboard: React.FC = () => {
   return (
@@ -30,16 +31,7 @@ const Dashboard: React.FC = () => {
           </div>
         </Card>
         <div className="card card-border bg-base-100 shadow lg:row-span-2">
-          <div className="card-body">
-            <h2 className="card-title">Card Title</h2>
-            <p>
-              A card component has a figure, a body part, and inside body there
-              are title and actions parts. Third
-            </p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Buy Now</button>
-            </div>
-          </div>
+          <Cally />
         </div>
         <Card>
           <h2 className="card-title">Card Title</h2>
@@ -51,18 +43,6 @@ const Dashboard: React.FC = () => {
             <button className="btn btn-primary">Buy Now</button>
           </div>
         </Card>
-        {/* <div className="card card-border bg-base-100 shadow lg:col-span-3">
-          <div className="card-body">
-            <h2 className="card-title">Card Title</h2>
-            <p>
-              A card component has a figure, a body part, and inside body there
-              are title and actions parts. Last
-            </p>
-            <div className="card-actions justify-end">
-              <button className="btn btn-primary">Buy Now</button>
-            </div>
-          </div>
-        </div> */}
       </div>
     </div>
   );
