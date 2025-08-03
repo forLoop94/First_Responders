@@ -3,21 +3,74 @@ import { PrismaClient } from "../../generated/prisma";
 import { sendError, sendSuccess } from "../../utils/response";
 const prisma = new PrismaClient();
 
+interface IPatientFilter {
+  role: string;
+  name: string;
+  email?: string;
+}
+
 export const getpatients = async (
   req: Request,
   res: Response
 ): Promise<void> => {
+  const { search, name, email, sort } = req.query;
+
+  const whereClause: any = {
+    role: "PATIENT",
+  };
+
+  if (search) {
+    whereClause.OR = [
+      { name: { contains: search as string, mode: "insensitive" } },
+      { email: { contains: search as string, mode: "insensitive" } },
+    ];
+  }
+
+  if (name) whereClause.name = name;
+  if (email) whereClause.email = email;
+
+  // Handle sorting
+  const sortOptions: Record<string, { [key: string]: "asc" | "desc" }> = {
+    newest: { createdAt: "desc" },
+    oldest: { createdAt: "asc" },
+    "a-z": { name: "asc" },
+    "z-a": { name: "desc" },
+  };
+
+  const orderBy = sortOptions[sort as string] || { createdAt: "desc" };
+
+  // setup pagination
+  const page = parseInt(req.query.page as string) || 1;
+  const limit = parseInt(req.query.limit as string) || 5;
+  const skip = (page - 1) * limit;
+
+  // Fetch jobs
   try {
-    const patients = await prisma.user.findMany({
-      where: { role: "PATIENT" },
-    });
+    const [patients, totalPatients] = await Promise.all([
+      prisma.user.findMany({
+        where: whereClause,
+        orderBy,
+        skip,
+        take: limit,
+      }),
+      prisma.user.count({
+        where: whereClause,
+      }),
+    ]);
 
     if (!patients || patients.length === 0) {
       sendSuccess(res, "No patients found.");
       return;
     }
 
-    sendSuccess(res, "patients fetched successfully.", patients);
+    const numOfPages = Math.ceil(totalPatients / limit);
+
+    sendSuccess(res, "patients fetched successfully.", {
+      totalPatients,
+      numOfPages,
+      currentPage: page,
+      patients,
+    });
   } catch (error: any) {
     console.error("Error fetching patients:", error);
 
