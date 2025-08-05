@@ -1,5 +1,7 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
+import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import Login from "./pages/auth/Login";
 import Growl from "./components/Growler";
 import Root from "./pages/Root";
@@ -9,12 +11,20 @@ import Register from "./pages/auth/Register";
 import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Settings from "./pages/Settings";
-import Patients from "./pages/Patients";
+import PatientsUI from "./pages/PatientsUI";
 import Landing from "./pages/Landing";
 import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
 import { loader as patientsLoader } from "./loaders/patientsLoader";
+
+const queryClient = new QueryClient({
+  defaultOptions: {
+    queries: {
+      staleTime: 1000 * 60 * 5,
+    },
+  },
+});
 
 const router = createBrowserRouter([
   {
@@ -60,8 +70,8 @@ const router = createBrowserRouter([
           },
           {
             path: "patients",
-            element: <Patients />,
-            loader: patientsLoader,
+            element: <PatientsUI />,
+            loader: patientsLoader(queryClient),
           },
         ],
       },
@@ -70,10 +80,10 @@ const router = createBrowserRouter([
 ]);
 
 const App = () => (
-  <>
+  <QueryClientProvider client={queryClient}>
     <Growl />
     <RouterProvider router={router} />
-  </>
+  </QueryClientProvider>
 );
 
 export default App;

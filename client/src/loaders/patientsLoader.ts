@@ -1,18 +1,33 @@
+import { LoaderFunctionArgs } from "react-router-dom";
 import { getPatients } from "../services/patients-service";
-import { growl } from "../utils/growl";
+import { QueryClient } from "@tanstack/react-query";
 
-export const loader = async () => {
-  try {
-    const response = await getPatients();
-    if (response.success) {
-      growl(response.message, "success");
-    } else {
-      growl(response.message, "error");
-    }
-    console.log("testD", response);
-    return response;
-  } catch (error: any) {
-    console.error("Failed to fetch Patients:", error);
-    growl(error.message, "error");
-  }
+export const patientsQuery = (params: any) => {
+  const { search, name, email, sort, page } = params;
+  return {
+    queryKey: [
+      "patients",
+      search ?? "",
+      name ?? "",
+      email ?? "",
+      sort ?? "newest",
+      page ?? 1,
+    ],
+    queryFn: async () => {
+      const { data } = await getPatients(params);
+      return data;
+    },
+  };
 };
+
+export const loader =
+  (queryClient: QueryClient) =>
+  async ({ request }: LoaderFunctionArgs) => {
+    const url = new URL(request.url);
+    const params = Object.fromEntries(url.searchParams.entries());
+
+    await queryClient.ensureQueryData(patientsQuery(params));
+    return {
+      searchValues: { ...params },
+    };
+  };
