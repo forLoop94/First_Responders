@@ -1,39 +1,38 @@
-import React, { useState } from "react";
-// import TableListApi from "../components/TableListApi";
+import React, { useContext, useEffect, useState } from "react";
 import { ITableHeader } from "../interfaces/i-table-headers";
 import { GoTrash } from "react-icons/go";
 import { LiaEditSolid } from "react-icons/lia";
 import Modal from "../components/Modal";
-import { useLoaderData } from "react-router-dom";
+import { PatientsContext } from "../pages/PatientsUI";
+import { IPatientData } from "../interfaces/i-patients";
 
 const Patients: React.FC = () => {
-  const { data } = useLoaderData();
+  const { data } = useContext(PatientsContext);
+
+  const patients = data?.patients || [];
+  const totalPatients = data?.totalPatients || 0;
+  const numOfPages = data?.numOfPages || 1;
+
   const headers: ITableHeader[] = [
     { id: "name", value: "name", label: "Name" },
     { id: "email", value: "email", label: "Email" },
     { id: "isVerified", value: "isVerified", label: "Verification Status" },
     { id: "role", value: "role", label: "Role" },
   ];
-  const [tableData, setTableData] = useState<any>(data);
+
+  const [tableData, setTableData] = useState<IPatientData[]>(patients);
   const [deleteTargetId, setDeleteTargetId] = useState<string | null>(null);
   const isActionColumnRequested = true;
+
+  useEffect(() => {
+    setTableData(patients);
+  }, [patients]);
 
   const handleConfirmDelete = (id: string) => {
     let newData = tableData.filter((data: any) => data.id !== id);
     setTableData(newData);
     setDeleteTargetId(null);
   };
-
-  // return (
-  //   <div>
-  //     <h1>Patients</h1>
-  //     <TableListApi
-  //       headers={headers}
-  //       data={data}
-  //       isActionColumnRequested={isActionColumnRequested}
-  //     />
-  //   </div>
-  // );
 
   return (
     <div className="overflow-x-auto">
