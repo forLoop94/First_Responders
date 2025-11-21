@@ -3,6 +3,7 @@ import { Request, Response } from "express";
 import { PrismaClient } from "../../generated/prisma";
 import { sendError, sendSuccess } from "../../utils/response";
 import { AuthenticatedRequest } from "../../types/authenticatedRequest";
+import cloudinary from "../../utils/cloudinary";
 const prisma = new PrismaClient();
 
 export const getUsers = async (req: Request, res: Response): Promise<void> => {
@@ -71,6 +72,7 @@ export const getCurrentUser = async (
         name: true,
         email: true,
         role: true,
+        profileImage: true,
       },
     });
 
@@ -83,5 +85,36 @@ export const getCurrentUser = async (
   } catch (error) {
     console.error("Error fetching current user:", error);
     sendError(res, "Something went wrong while fetching current user.");
+  }
+};
+
+export const userImageUpload = async (req: Request, res: Response) => {
+  try {
+    if (!req.file) {
+      sendError(res, "No file uploaded.", 400);
+      return;
+    }
+
+    const fileStr = `data:${
+      req.file.mimetype
+    };base64,${req.file.buffer.toString("base64")}`;
+
+    const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+      folder: "user_profiles",
+    });
+
+    const updatedUser = await prisma.user.update({
+      where: { id: req.body.userId },
+      data: { profileImage: uploadResponse.secure_url },
+    });
+
+    res.json({
+      message: "Upload successful",
+      imageUrl: uploadResponse.secure_url,
+    });
+  } catch (err) {
+    console.error(err);
+    sendError(res, "Upload failed.", 500);
+    return;
   }
 };

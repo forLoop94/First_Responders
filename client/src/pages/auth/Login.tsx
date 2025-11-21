@@ -3,6 +3,8 @@ import { growl } from "../../utils/growl";
 import axios from "axios";
 import { useNavigate } from "react-router-dom";
 import LoadingButton from "../../components/LoadingButton";
+import Logo from "../../components/Logo";
+import { loginAPI } from "../../services/auth-service";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();
@@ -14,23 +16,15 @@ const Login: React.FC = () => {
 
   const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
     e.preventDefault();
-
     try {
       setIsLoading(true);
-      const response: any = await axios.post(
-        "http://localhost:5500/api/auth/login",
-        data,
-        { withCredentials: true }
-      );
-
-      const result = response.data;
-
-      if (result.success) {
-        navigate("/");
-        growl(result.message, "success");
+      const response = await loginAPI(data);
+      if (response.success) {
+        navigate("/dashboard");
+        growl(response.message, "success");
       } else {
         navigate("/login");
-        growl(result.message, "error");
+        growl(response.message, "error");
       }
     } catch (error: any) {
       setIsLoading(true);
@@ -53,10 +47,7 @@ const Login: React.FC = () => {
       <div className="hero bg-base-200 min-h-screen">
         <div className="hero-content flex-col">
           <div className="">
-            <h2 className="text-2xl mb-6 md:text-3xl">
-              <span className="text-base-content">Life</span>
-              <span className="text-primary">Care</span>
-            </h2>
+            <Logo />
             <h1 className="text-base-content text-center text-4xl font-bold lg:text-5xl">
               Welcome Back!
             </h1>

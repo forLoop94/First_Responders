@@ -1,69 +1,22 @@
-import React, { useEffect } from "react";
-import axios from "axios";
-import { growl } from "../utils/growl";
-import { useNavigate } from "react-router-dom";
+import React from "react";
+import { Outlet, useLoaderData } from "react-router-dom";
+import NavigationPanel from "../components/NavigationPanel";
+import { createContext } from "react";
+import { ICurrentUser } from "../interfaces/i-users";
+
+export const UserContext = createContext<ICurrentUser | null>(null);
 
 const Root: React.FC = () => {
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    getCurrentUser();
-  }, []);
-
-  const getCurrentUser = async () => {
-    try {
-      const response = await axios.get(
-        "http://localhost:5500/api/users/currentUser",
-        {
-          withCredentials: true,
-        }
-      );
-
-      const result = response.data;
-
-      if (result.success) {
-        console.log("Login response:", result);
-        growl(result.message, "success");
-      } else {
-        growl(result.message, "error");
-      }
-    } catch (error: any) {
-      if (error.response?.status === 401) {
-        try {
-          await axios.post(
-            "http://localhost:5500/api/auth/refresh",
-            {},
-            { withCredentials: true }
-          );
-
-          const res = await axios.get(
-            "http://localhost:5500/api/users/currentUser",
-            {
-              withCredentials: true,
-            }
-          );
-          return res.data;
-        } catch (refreshError: any) {
-          console.log("holla:", refreshError);
-
-          if (refreshError.response?.status === 401) {
-            navigate("/login");
-            growl("Session expired. Login again", "info");
-            return;
-          }
-          console.error("Token refresh failed", refreshError);
-        }
-      }
-
-      console.error("Login failed:", error);
-      growl(error.message, "error");
-    }
-  };
-
+  const data = useLoaderData() as ICurrentUser;
   return (
-    <>
-      <h1>Root</h1>
-    </>
+    <UserContext.Provider value={data}>
+      <div className="flex">
+        <NavigationPanel />
+        <main className="flex-grow p-4 bg-base-200 h-screen">
+          <Outlet />
+        </main>
+      </div>
+    </UserContext.Provider>
   );
 };
 
