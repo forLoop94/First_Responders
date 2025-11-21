@@ -4,6 +4,7 @@ import Stat from "../components/Stat";
 import Card from "../components/Card";
 import ScoreLineChart from "../components/Chart";
 import Cally from "../components/Cally";
+import Footer from "./Footer";
 
 const Dashboard: React.FC = () => {
   return (
@@ -44,6 +45,7 @@ const Dashboard: React.FC = () => {
           </div>
         </Card>
       </div>
+      <Footer />
     </div>
   );
 };
