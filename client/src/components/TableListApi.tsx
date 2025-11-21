@@ -86,28 +86,33 @@ import React, { useMemo, useState } from "react";
 import { ITableHeader } from "../interfaces/i-table-headers";
 import { GoTrash } from "react-icons/go";
 import { LiaEditSolid } from "react-icons/lia";
+import TableListRow from "./TableListRow";
 
 interface ITableProps {
   headers: ITableHeader[];
-  data: any[];
+  data: any;
   isActionColumnRequested: boolean;
+  children: any;
 }
 
 const TableListApi: React.FC<ITableProps> = ({
   headers,
   data,
   isActionColumnRequested,
+  children,
 }) => {
   /* -------------------------------------------
    * 1) Local copy of data so we can delete rows
    * ----------------------------------------- */
   const [tableData, setTableData] = useState<any[]>(data);
+  const [isEditRequested, setIsEditRequested] = useState<boolean>(false);
 
   /* ---------------------------------------------------------------
    * 2) Column map:  ["name", "job", "company", …]  ← from headers
    *    useMemo recomputes **only** when headers array changes.
    * ------------------------------------------------------------- */
   const tableColumnMap = useMemo(() => headers.map((h) => h.value), [headers]);
+  const [openRowId, setOpenRowId] = useState<string | null>(null);
 
   /* ----------------------------
    * 3) Delete handler
@@ -137,25 +142,42 @@ const TableListApi: React.FC<ITableProps> = ({
 
         <tbody>
           {tableData.map((row, index) => (
-            <tr key={row.id}>
-              {/* Row number */}
-              <th scope="row">{index + 1}</th>
+            // <React.Fragment>
+            //   <tr key={row.id}>
+            //     {/* Row number */}
+            //     <th scope="row">{index + 1}</th>
 
-              {/* Body cells follow the same order as <thead> */}
-              {tableColumnMap.map((colKey) => (
-                <td key={colKey}>{row[colKey as keyof typeof row]}</td>
-              ))}
+            //     {/* Body cells follow the same order as <thead> */}
+            //     {tableColumnMap.map((colKey) => (
+            //       <td key={colKey}>{row[colKey as keyof typeof row]}</td>
+            //     ))}
 
-              {/* Optional actions */}
-              {isActionColumnRequested && (
-                <td>
-                  <div className="flex">
-                    <LiaEditSolid className="mr-5" />
-                    <GoTrash onClick={() => handleRowDelete(row.id)} />
-                  </div>
-                </td>
-              )}
-            </tr>
+            //     {/* Optional actions */}
+            //     {isActionColumnRequested && (
+            //       <td>
+            //         <div className="flex">
+            //           <LiaEditSolid
+            //             className="mr-5"
+            //             onClick={() => setIsEditRequested(!isEditRequested)}
+            //           />
+            //           <GoTrash onClick={() => handleRowDelete(row.id)} />
+            //         </div>
+            //       </td>
+            //     )}
+            //   </tr>
+            //   {isEditRequested && <tr>khjhdsfdfd</tr>}
+            // </React.Fragment>
+            <TableListRow
+              key={row.id}
+              tableColumnMap={tableColumnMap}
+              row={row}
+              index={index}
+              isActionColumnRequested={isActionColumnRequested}
+              subRow={children}
+              openRowId={openRowId}
+              setOpenRowId={setOpenRowId}
+              handleRowDelete={handleRowDelete}
+            />
           ))}
         </tbody>
       </table>

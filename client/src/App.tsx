@@ -17,6 +17,7 @@ import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
 import { loader as patientsLoader } from "./loaders/patientsLoader";
+import Analytics from "./pages/Analytics";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -72,6 +73,10 @@ const router = createBrowserRouter([
             path: "patients",
             element: <PatientsUI />,
             loader: patientsLoader(queryClient),
+          },
+          {
+            path: "analytics",
+            element: <Analytics />,
           },
         ],
       },

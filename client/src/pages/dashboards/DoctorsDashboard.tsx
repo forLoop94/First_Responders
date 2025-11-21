@@ -59,9 +59,9 @@ const DoctorsDashboard: React.FC = () => {
       </Link>
       <small className="text-xs mb-2 mt-5">Reports</small>
       <Link
-        to="#"
+        to="/dashboard/analytics"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "#"
+          "/dashboard/analytics"
         )}`}
       >
         <TbBrandGoogleAnalytics />
