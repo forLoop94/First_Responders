@@ -10,8 +10,8 @@ const Patients: React.FC = () => {
   const { data } = useContext(PatientsContext);
 
   const patients = data?.patients || [];
-  const totalPatients = data?.totalPatients || 0;
-  const numOfPages = data?.numOfPages || 1;
+  // const totalPatients = data?.totalPatients || 0;
+  // const numOfPages = data?.numOfPages || 1;
 
   const headers: ITableHeader[] = [
     { id: "name", value: "name", label: "Name" },

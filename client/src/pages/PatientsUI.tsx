@@ -11,7 +11,7 @@ export const PatientsContext = createContext<any>(null);
 const PatientsUI: React.FC = () => {
   const { searchValues } = useLoaderData();
 
-  const { data, isLoading, error } = useQuery(patientsQuery(searchValues));
+  const { data } = useQuery(patientsQuery(searchValues)); // isLoading, error - destructure this two along with data
 
   return (
     <PatientsContext.Provider value={{ data, searchValues }}>
