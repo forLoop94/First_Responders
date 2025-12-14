@@ -1,7 +1,6 @@
 import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
-
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { sendError, sendSuccess } from "../../utils/response";
 import dotenv from "dotenv";
 import { sendResetEmail } from "../../mailer";

@@ -2,7 +2,7 @@ import bcrypt from "bcryptjs";
 import nodeMailer from "nodemailer";
 import { Response } from "express";
 import { v4 as uuidv4 } from "uuid";
-import { PrismaClient } from "./generated/prisma";
+import { PrismaClient } from "@prisma/client";
 const prisma = new PrismaClient();
 import dotenv from "dotenv";
 import { sendError, sendSuccess } from "./utils/response";

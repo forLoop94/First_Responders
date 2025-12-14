@@ -2,7 +2,7 @@ import { Request, Response } from "express";
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
 import { sendError, sendSuccess } from "../../utils/response";
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { sendVerificationEmail } from "../../mailer";
 import { matchPassword } from "../../utils/matchPassword";
 import {

@@ -1,6 +1,5 @@
 import { Request, Response } from "express";
-
-import { PrismaClient } from "../../generated/prisma";
+import { PrismaClient } from "@prisma/client";
 import { sendError, sendSuccess } from "../../utils/response";
 import { AuthenticatedRequest } from "../../types/authenticatedRequest";
 import cloudinary from "../../utils/cloudinary";
@@ -80,6 +79,8 @@ export const getCurrentUser = async (
       sendError(res, "User not found.", 404);
       return;
     }
+
+    console.log(user);
 
     sendSuccess(res, "Current user fetched successfully.", user);
   } catch (error) {
