@@ -1,4 +1,3 @@
-import React from "react";
 import VisitCalendar from "../components/Calendar";
 
 const Appointments = () => {

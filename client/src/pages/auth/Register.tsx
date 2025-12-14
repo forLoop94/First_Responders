@@ -8,7 +8,7 @@ import Logo from "../../components/Logo";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
-  const [selectedRole, setSelectedRole] = useState<Role>();
+  const [selectedRole] = useState<Role>();
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [data, setData] = useState({
     name: "",
