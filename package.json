@@ -4,7 +4,7 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "start": "node server.ts",
+    "start": "node dist/server.js",
     "postinstall": "cd client && npm install --legacy-peer-deps && npm run build",
     "devStart": "nodemon script.ts",
     "client": "cd client && npm run dev",
