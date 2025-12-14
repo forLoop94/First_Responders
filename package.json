@@ -4,12 +4,12 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "postinstall": "npm run build 2>&1",
-    "build": "set -e; npm run generate; npm run build:server; npm run build:client",
+    "start": "node build/server.js",
+    "postinstall": "npm run build",
+    "build": "npm run generate && npm run build:server && npm run build:client",
     "generate": "prisma generate",
-    "build:server": "echo '=== Building TypeScript ===' && npx tsc --noEmit 2>&1 && npx tsc 2>&1 && echo '=== TypeScript build complete ===' && ls -la dist/",
-    "build:client": "cd client && npm install --legacy-peer-deps 2>&1 && npm run build 2>&1",
-    "start": "node dist/server.js",
+    "build:server": "tsc",
+    "build:client": "cd client && npm install --legacy-peer-deps && npm run build",
     "devStart": "nodemon script.ts",
     "client": "cd client && npm run dev",
     "dev": "nodemon server.ts"
