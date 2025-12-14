@@ -1,10 +1,11 @@
-import VisitCalendar from "../components/Calendar";
+//import VisitCalendar from "../components/Calendar";
 
 const Appointments = () => {
   return (
     <div className="mt-10">
       <h1>Appointments</h1>
-      <VisitCalendar />
+      Appointments available soon...
+      {/* <VisitCalendar /> */}
     </div>
   );
 };
