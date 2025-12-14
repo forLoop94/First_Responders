@@ -1,10 +1,26 @@
 {
   "compilerOptions": {
-    "sourceMap": true,
-    "outDir": "dist",
+    "target": "ES2020",
+    "module": "commonjs",
+    "lib": ["ES2020"],
+    "outDir": "./build",
+    "rootDir": "./",
     "strict": true,
-    "lib": ["esnext"],
     "esModuleInterop": true,
-    "types": ["node", "express"]
-  }
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
+    "resolveJsonModule": true
+  },
+  "include": [
+    "server.ts",
+    "controllers/**/*",
+    "routes/**/*",
+    "middlewares/**/*",
+    "utils/**/*",
+    "types/**/*",
+    "prisma/**/*",
+    "mailer.ts",
+    "script.ts"
+  ],
+  "exclude": ["client", "node_modules", "dist", "client/**/*"]
 }
