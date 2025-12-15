@@ -15,7 +15,7 @@ const Settings: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axios.get("http://localhost:5500/api/users", {
+      const response = await axios.get("/api/users", {
         withCredentials: true,
       });
 
@@ -46,10 +46,7 @@ const Settings: React.FC = () => {
 
     try {
       setUploading(true);
-      const res = await axios.post(
-        "http://localhost:5500/api/users/image_upload",
-        formData
-      );
+      const res = await axios.post("/api/users/image_upload", formData);
       alert("Image uploaded: " + res.data.imageUrl);
       setPreview("");
       getUsers();

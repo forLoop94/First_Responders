@@ -22,10 +22,7 @@ const Register: React.FC = () => {
 
     try {
       setIsLoading(true);
-      const response: any = await axios.post(
-        "http://localhost:5500/api/auth/register",
-        data
-      );
+      const response: any = await axios.post("/api/auth/register", data);
 
       const result = response.data;
 
