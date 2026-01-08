@@ -1,6 +1,7 @@
 import express from "express";
 import cors from "cors";
 import dotenv from "dotenv";
+import { PrismaClient } from "@prisma/client";
 import { useCors } from "./utils/cors";
 import userRouter from "./routes/api/user";
 import authRouter from "./routes/api/auth";
@@ -16,6 +17,7 @@ import path from "path";
 
 dotenv.config();
 
+const prisma = new PrismaClient();
 const app = express();
 
 // Static files middleware - handle both development and production
@@ -63,7 +65,15 @@ app.use((req, res) => {
 
 const port = process.env.PORT || 3000;
 
-app.listen(port, () => {
+const server = app.listen(port, () => {
   console.log(`Server running on port ${port}`);
   console.log(`Environment: ${process.env.NODE_ENV || "development"}`);
+});
+
+process.on("SIGTERM", async () => {
+  console.log("SIGTERM received. Shutting down gracefully...");
+  await prisma.$disconnect();
+  server.close(() => {
+    process.exit(0);
+  });
 });
