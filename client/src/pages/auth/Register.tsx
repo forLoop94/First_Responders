@@ -1,6 +1,5 @@
 import React, { useState } from "react";
 import { growl } from "../../utils/growl";
-import axios from "axios";
 import LoadingButton from "../../components/LoadingButton";
 import { Role } from "../../enums/auth/e-auth";
 import { useNavigate } from "react-router-dom";

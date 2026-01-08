@@ -1,4 +1,3 @@
-import axios from "axios";
 import { IResponseFormat } from "../interfaces/i-response";
 import { IPatientData } from "../interfaces/i-patients";
 import customFetch from "../utils/customFetch";

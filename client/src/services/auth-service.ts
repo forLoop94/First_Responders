@@ -1,4 +1,3 @@
-import axios from "axios";
 import customFetch from "../utils/customFetch";
 
 const base_URL = "/auth";

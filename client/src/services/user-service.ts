@@ -1,4 +1,3 @@
-import axios from "axios";
 import { IUserResponseFormat } from "../interfaces/i-response";
 import customFetch from "../utils/customFetch";
 

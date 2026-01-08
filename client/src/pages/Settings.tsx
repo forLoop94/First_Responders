@@ -1,4 +1,3 @@
-import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { IUsers } from "../interfaces/i-users";
 import { growl } from "../utils/growl";
