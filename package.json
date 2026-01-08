@@ -2,29 +2,15 @@
   "name": "first_responders",
   "version": "1.0.0",
   "description": "",
-  "main": "index.js",
+  "main": "build/server.js",
   "scripts": {
     "start": "node build/server.js",
-    "postinstall": "npm run build",
-    "build": "npm run generate && npm run build:server && npm run build:client",
-    "generate": "prisma generate",
+    "build": "npm run build:server && npm run build:client",
     "build:server": "tsc",
     "build:client": "cd client && npm install --legacy-peer-deps && npm run build",
-    "devStart": "nodemon script.ts",
-    "client": "cd client && npm run dev",
-    "dev": "nodemon server.ts"
+    "dev": "nodemon server.ts",
+    "client": "cd client && npm run dev"
   },
-  "repository": {
-    "type": "git",
-    "url": "git+https://github.com/forLoop94/First_Responders.git"
-  },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/forLoop94/First_Responders/issues"
-  },
-  "homepage": "https://github.com/forLoop94/First_Responders#readme",
   "dependencies": {
     "@prisma/client": "^6.6.0",
     "bcrypt": "^5.1.1",
