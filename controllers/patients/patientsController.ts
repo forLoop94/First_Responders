@@ -63,7 +63,7 @@ export const getpatients = async (
       return;
     }
 
-    const numOfPages = Math.ceil(totalPatients / limit);
+    const numOfPages = Math.ceil(totalPatients / limit) || 1;
 
     sendSuccess(res, "patients fetched successfully.", {
       totalPatients,
