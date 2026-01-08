@@ -1,12 +1,10 @@
 import axios from "axios";
 import { IResponseFormat } from "../interfaces/i-response";
 import { IPatientData } from "../interfaces/i-patients";
-
-const base_URL = "/api";
+import customFetch from "../utils/customFetch";
 
 export const getPatients = async (params: any) => {
-  const response = await axios.get(`${base_URL}/patients`, {
-    withCredentials: true,
+  const response = await customFetch.get("/patients", {
     params,
   });
   return response.data as IResponseFormat<IPatientData>;

@@ -4,6 +4,7 @@ import axios from "axios";
 import { useNavigate, useParams } from "react-router-dom";
 import LoadingButton from "../../components/LoadingButton";
 import Logo from "../../components/Logo";
+import customFetch from "../../utils/customFetch";
 
 interface IResetData {
   password: string;
@@ -28,9 +29,7 @@ const ResetPassword: React.FC = () => {
 
     try {
       setIsloading(true);
-      const response: any = await axios.post("/api/auth/resetPassword", data, {
-        withCredentials: true,
-      });
+      const response: any = await customFetch.post("/auth/resetPassword", data);
 
       const result = response.data;
 

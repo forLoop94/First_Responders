@@ -5,6 +5,7 @@ import LoadingButton from "../../components/LoadingButton";
 import { Role } from "../../enums/auth/e-auth";
 import { useNavigate } from "react-router-dom";
 import Logo from "../../components/Logo";
+import customFetch from "../../utils/customFetch";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -22,7 +23,7 @@ const Register: React.FC = () => {
 
     try {
       setIsLoading(true);
-      const response: any = await axios.post("/api/auth/register", data);
+      const response: any = await customFetch.post("/auth/register", data);
 
       const result = response.data;
 

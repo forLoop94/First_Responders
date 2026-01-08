@@ -1,11 +1,8 @@
 import axios from "axios";
 import { IUserResponseFormat } from "../interfaces/i-response";
-
-const base_URL = "/api/users";
+import customFetch from "../utils/customFetch";
 
 export const getCurrentUser = async () => {
-  const response = await axios.get(`${base_URL}/currentUser`, {
-    withCredentials: true,
-  });
+  const response = await customFetch.get("/users/currentUser");
   return response.data as IUserResponseFormat;
 };

@@ -2,6 +2,7 @@ import axios from "axios";
 import React, { useEffect, useState } from "react";
 import { IUsers } from "../interfaces/i-users";
 import { growl } from "../utils/growl";
+import customFetch from "../utils/customFetch";
 
 const Settings: React.FC = () => {
   const [users, setUsers] = useState<IUsers[]>([]);
@@ -15,9 +16,7 @@ const Settings: React.FC = () => {
 
   const getUsers = async () => {
     try {
-      const response = await axios.get("/api/users", {
-        withCredentials: true,
-      });
+      const response = await customFetch.get("/users");
 
       const result = response.data;
 
@@ -46,7 +45,7 @@ const Settings: React.FC = () => {
 
     try {
       setUploading(true);
-      const res = await axios.post("/api/users/image_upload", formData);
+      const res = await customFetch.post("/users/image_upload", formData);
       alert("Image uploaded: " + res.data.imageUrl);
       setPreview("");
       getUsers();

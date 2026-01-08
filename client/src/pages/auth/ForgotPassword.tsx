@@ -3,6 +3,7 @@ import { growl } from "../../utils/growl";
 import axios from "axios";
 import LoadingButton from "../../components/LoadingButton";
 import Logo from "../../components/Logo";
+import customFetch from "../../utils/customFetch";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>("");
@@ -13,7 +14,7 @@ const ForgotPassword: React.FC = () => {
 
     try {
       setIsloading(true);
-      const response = await axios.get(`/api/auth/forgotPassword/${email}`);
+      const response = await customFetch.get(`/auth/forgotPassword/${email}`);
 
       const result = response.data;
 
