@@ -4,9 +4,13 @@ import { useLocation, useNavigate } from "react-router-dom";
 import { PatientsContext } from "../pages/PatientsUI";
 
 const PaginationButtons: React.FC = () => {
-  const {
-    data: { numOfPages, currentPage },
-  } = useContext(PatientsContext);
+  const patientsContext = useContext(PatientsContext);
+
+  if (!patientsContext || !patientsContext.data) {
+    return null; // or loading spinner
+  }
+
+  const { numOfPages, currentPage } = patientsContext.data;
 
   const { search, pathname } = useLocation();
   const navigate = useNavigate();
