@@ -12,7 +12,7 @@ const Root: React.FC = () => {
     <UserContext.Provider value={data}>
       <div className="flex">
         <NavigationPanel />
-        <main className="flex-grow p-4 bg-base-200 h-screen">
+        <main className="flex-grow p-4 bg-base-200">
           <Outlet />
         </main>
       </div>

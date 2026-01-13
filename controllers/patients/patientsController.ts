@@ -1,13 +1,11 @@
 import { Request, Response } from "express";
 import { PrismaClient } from "@prisma/client";
 import { sendError, sendSuccess } from "../../utils/response";
+import { getPagination } from "../../utils/paginate";
+// import { fetchPaginated } from "../../utils/queryHelper";
+// import { buildFilters } from "../../utils/buildFilters";
+import { buildSort } from "../../utils/buildSort";
 const prisma = new PrismaClient();
-
-interface IPatientFilter {
-  role: string;
-  name: string;
-  email?: string;
-}
 
 export const getpatients = async (
   req: Request,
@@ -30,19 +28,15 @@ export const getpatients = async (
   if (email) whereClause.email = email;
 
   // Handle sorting
-  const sortOptions: Record<string, { [key: string]: "asc" | "desc" }> = {
+  const orderBy = buildSort(sort as string, {
     newest: { createdAt: "desc" },
     oldest: { createdAt: "asc" },
     "a-z": { name: "asc" },
     "z-a": { name: "desc" },
-  };
-
-  const orderBy = sortOptions[sort as string] || { createdAt: "desc" };
+  });
 
   // setup pagination
-  const page = parseInt(req.query.page as string) || 1;
-  const limit = parseInt(req.query.limit as string) || 5;
-  const skip = (page - 1) * limit;
+  const { page, limit, skip } = getPagination(req);
 
   // Fetch jobs
   try {
