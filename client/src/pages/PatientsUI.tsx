@@ -5,6 +5,7 @@ import { useQuery } from "@tanstack/react-query";
 import { patientsQuery } from "../loaders/patientsLoader";
 import Patients from "../components/Patients";
 import PaginationButtons from "../components/PaginationButtons";
+import { patientsFilters } from "../filter-schemas/patients-filter";
 
 export const PatientsContext = createContext<any>(null);
 
@@ -15,7 +16,11 @@ const PatientsUI: React.FC = () => {
 
   return (
     <PatientsContext.Provider value={{ data, searchValues }}>
-      <FilterContainer />
+      <FilterContainer
+        searchValues={searchValues}
+        filters={patientsFilters}
+        resetPath="/dashboard/patients"
+      />
       <Patients />
       <PaginationButtons />
     </PatientsContext.Provider>

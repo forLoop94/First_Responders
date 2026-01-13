@@ -4,26 +4,44 @@ import FormRow from "./FormRow";
 import FormRowSelect from "./FormRowSelect";
 import { E_SORT_VALUES } from "../enums/e-sorting";
 import Card from "./Card";
-import { PatientsContext } from "../pages/PatientsUI";
+import { FilterField } from "../interfaces/i-filters";
+//import { PatientsContext } from "../pages/PatientsUI";
 
-const FilterContainer: React.FC = () => {
-  const { searchValues } = useContext(PatientsContext);
+interface IFilterContainer {
+  searchValues: Record<string, string>;
+  filters: FilterField[];
+  resetPath: string;
+}
 
-  const { search, name, email, sort } = searchValues;
+const FilterContainer: React.FC<IFilterContainer> = ({
+  searchValues,
+  filters,
+  resetPath,
+}) => {
   const submit = useSubmit();
 
-  const debounce = (onChange: (form: HTMLFormElement) => void) => {
-    let timeout: NodeJS.Timeout;
+  // const debounce = (onChange: (form: HTMLFormElement) => void) => {
+  //   let timeout: NodeJS.Timeout;
 
-    return (e: ChangeEvent<HTMLInputElement>) => {
-      const form = e.currentTarget.form;
-      if (!form) return;
+  //   return (e: ChangeEvent<HTMLInputElement>) => {
+  //     const form = e.currentTarget.form;
+  //     if (!form) return;
 
-      clearTimeout(timeout);
-      timeout = setTimeout(() => {
-        onChange(form);
-      }, 2000);
-    };
+  //     clearTimeout(timeout);
+  //     timeout = setTimeout(() => {
+  //       onChange(form);
+  //     }, 2000);
+  //   };
+  // };
+
+  const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
+
+  const handleDebouncedChange = (form: HTMLFormElement) => {
+    if (debounceRef.current) clearTimeout(debounceRef.current);
+
+    debounceRef.current = setTimeout(() => {
+      submit(form);
+    }, 500);
   };
 
   return (
@@ -32,46 +50,43 @@ const FilterContainer: React.FC = () => {
         <Form>
           <div className="flex justify-between">
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 flex-3">
-              <FormRow
-                type="search"
-                name="search"
-                labelText="Search"
-                waterMark={search}
-                onChange={debounce((form) => {
-                  submit(form);
-                })}
-              />
-              <FormRow
-                type="text"
-                name="name"
-                labelText="Name"
-                waterMark={name}
-                onChange={debounce((form) => {
-                  submit(form);
-                })}
-              />
-              <FormRow
-                type="email"
-                name="email"
-                labelText="Email"
-                waterMark={email}
-                onChange={debounce((form) => {
-                  submit(form);
-                })}
-              />
-              <FormRowSelect
-                name="sort"
-                labelText="Sort"
-                waterMark={sort}
-                list={[...Object.values(E_SORT_VALUES)]}
-                onChange={(e) => {
-                  submit(e.currentTarget.form);
-                }}
-              />
+              {filters.map((field) => {
+                const value = searchValues[field.name] ?? "";
+
+                if (field.type === "select") {
+                  return (
+                    <FormRowSelect
+                      key={field.name}
+                      name={field.name}
+                      labelText={field.label}
+                      waterMark={value}
+                      list={field.options!}
+                      onChange={(e) => submit(e.currentTarget.form)}
+                    />
+                  );
+                }
+                return (
+                  <FormRow
+                    key={field.name}
+                    type={field.type}
+                    name={field.name}
+                    labelText={field.label}
+                    waterMark={value}
+                    onChange={(e) => {
+                      const form = e.currentTarget.form;
+                      if (!form) return;
+
+                      field.debounce
+                        ? handleDebouncedChange(form)
+                        : submit(form);
+                    }}
+                  />
+                );
+              })}
             </div>
             <div className="flex justify-center sm:justify-end lg:justify-end flex-1">
               <Link
-                to="/dashboard/patients"
+                to={resetPath} //"/dashboard/patients"
                 className="btn btn-primary float-right mt-6"
               >
                 Reset
