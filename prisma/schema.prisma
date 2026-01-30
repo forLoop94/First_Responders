@@ -16,95 +16,375 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model User {
-  id           String   @id @default(uuid())
-  name         String
-  email        String   @unique
-  password     String
-  profileImage String?  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
-  role         Role
-  createdAt    DateTime @default(now())
-  updatedAt    DateTime @updatedAt
-  isVerified   Boolean  @default(false)
+// model User {
+//   id           String   @id @default(uuid())
+//   name         String
+//   email        String   @unique
+//   password     String
+//   profileImage String?  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
+//   role         Role
+//   createdAt    DateTime @default(now())
+//   updatedAt    DateTime @updatedAt
+//   isVerified   Boolean  @default(false)
 
-  prescribedMedications Prescription[] @relation("PrescribedMedications")
-  issuedMedications     Prescription[] @relation("IssuedMedications")
-  patients              Prescription[] @relation("patients")
-  Expenses              Expenses[]
+//   prescribedMedications Prescription[] @relation("PrescribedMedications")
+//   issuedMedications     Prescription[] @relation("IssuedMedications")
+//   patients              Prescription[] @relation("patients")
+//   Expenses              Expenses[]
+// }
+
+// model UserVerification {
+//   id           String   @id @default(uuid())
+//   userId       String
+//   uniqueString String
+//   createdAt    DateTime
+//   expiresAt    DateTime
+// }
+
+// model PasswordReset {
+//   id          String   @id @default(uuid())
+//   userId      String
+//   resetString String
+//   createdAt   DateTime
+//   expiresAt   DateTime
+// }
+
+// model Appointment {
+//   id      String   @id @default(uuid())
+//   title   String
+//   start   DateTime
+//   end     DateTime
+//   type    String
+//   tooltip String
+// }
+
+// model Expenses {
+//   id             String   @id @default(uuid())
+//   title          String
+//   amount         Int
+//   date           DateTime
+//   authorizedBy   User?    @relation(fields: [authorizedById], references: [id])
+//   authorizedById String?
+// }
+
+// model Invoice {
+//   id           String @id @default(uuid())
+//   uniqueString String @unique
+//   billables    Json
+//   amount       Int
+//   quantity     Int
+// }
+
+// model Medication {
+//   id             String         @id @default(uuid())
+//   name           String         @unique
+//   manufacturer   String
+//   price          Int
+//   prescriptions  Prescription[] @relation("PrescriptionMedications")
+//   prescriptionId String?
+// }
+
+// model Prescription {
+//   id               String   @id @default(uuid())
+//   uniqueString     String   @unique
+//   prescriptionDate DateTime
+//   issueDate        DateTime
+//   prescribedById   String?
+//   issuedById       String?
+//   patientId        String?
+
+//   prescribedBy User?        @relation("PrescribedMedications", fields: [prescribedById], references: [id])
+//   issuedBy     User?        @relation("IssuedMedications", fields: [issuedById], references: [id])
+//   patient      User?        @relation("patients", fields: [patientId], references: [id])
+//   medications  Medication[] @relation("PrescriptionMedications")
+
+//   @@index([prescribedById])
+//   @@index([issuedById])
+// }
+
+model User {
+  id       String @id @default(uuid())
+  name     String
+  email    String @unique
+  password String
+  role     Role
+
+  createdAt  DateTime @default(now()) @map("created_at")
+  updatedAt  DateTime @updatedAt @map("updated_at")
+  isVerified Boolean  @default(false) @map("is_verified")
+
+  patient Patient? // has one
+  doctor  Doctor?
+  admin   Admin?
+
+  @@map("users")
 }
 
 model UserVerification {
   id           String   @id @default(uuid())
-  userId       String
-  uniqueString String
-  createdAt    DateTime
-  expiresAt    DateTime
+  userId       String   @map("user_id")
+  uniqueString String   @map("unique_string")
+  createdAt    DateTime @map("created_at")
+  expiresAt    DateTime @map("expires_at")
 }
 
 model PasswordReset {
   id          String   @id @default(uuid())
-  userId      String
-  resetString String
-  createdAt   DateTime
-  expiresAt   DateTime
+  userId      String   @map("user_id")
+  resetString String   @map("reset_string")
+  createdAt   DateTime @map("created_at")
+  expiresAt   DateTime @map("expires_at")
+}
+
+model Patient {
+  id             String  @id @default(uuid())
+  surname        String?
+  otherNames     String? @map("other_names")
+  profileImage   String  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
+  referralStatus Boolean @map("referral_status")
+
+  userId       String        @unique @map("user_id")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade) // belongs to
+  appointments Appointment[]
+
+  @@map("patients")
+}
+
+model Doctor {
+  id             String      @id @default(uuid())
+  surname        String?
+  otherNames     String?     @map("other_names")
+  profileImage   String?     @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
+  specialization String
+  licenseNumber  String      @map("license_number")
+  availability   Availabilty
+
+  userId       String        @unique @map("user_id")
+  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
+  appointments Appointment[]
+
+  @@map("doctors")
+}
+
+model Admin {
+  id           String  @id @default(uuid())
+  surname      String?
+  otherNames   String? @map("other_names")
+  profileImage String? @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
+
+  userId String @unique @map("user_id")
+  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+
+  @@map("admins")
 }
 
 model Appointment {
-  id      String   @id @default(uuid())
-  title   String
-  start   DateTime
-  end     DateTime
-  type    String
-  tooltip String
+  id                String            @id @default(uuid())
+  startTime         DateTime?         @map("start_time")
+  endTime           DateTime?         @map("end_time")
+  notes             String?
+  reason            String?
+  vitals            Boolean?
+  paymentStatus     PaymentStatus     @default(UNPAID) @map("payment_status")
+  appointmentStatus AppointmentStatus @default(NOTSCHEDULED) @map("APPOINTMENT_status")
+
+  patientId String?
+  doctorId  String?
+
+  patient   Patient?    @relation(fields: [patientId], references: [id])
+  doctor    Doctor?     @relation(fields: [doctorId], references: [id])
+  diagnoses Diagnosis[]
+
+  createdAt DateTime @default(now())
+
+  @@map("appointments")
 }
 
-model Expenses {
-  id             String   @id @default(uuid())
-  title          String
-  amount         Int
-  date           DateTime
-  authorizedBy   User?    @relation(fields: [authorizedById], references: [id])
-  authorizedById String?
-}
+model Diagnosis {
+  id          String   @id @default(uuid())
+  description String
+  severity    Severity
 
-model Invoice {
-  id           String @id @default(uuid())
-  uniqueString String @unique
-  billables    Json
-  amount       Int
-  quantity     Int
-}
+  appointmentId String
+  appointment   Appointment @relation(fields: [appointmentId], references: [id])
 
-model Medication {
-  id             String         @id @default(uuid())
-  name           String         @unique
-  manufacturer   String
-  price          Int
-  prescriptions  Prescription[] @relation("PrescriptionMedications")
-  prescriptionId String?
+  prescription Prescription? // sometimes there could be diagnosis without prescriptions
+
+  createdAt DateTime @default(now())
+
+  @@map("diagnosis")
 }
 
 model Prescription {
-  id               String   @id @default(uuid())
-  uniqueString     String   @unique
-  prescriptionDate DateTime
-  issueDate        DateTime
-  prescribedById   String?
-  issuedById       String?
-  patientId        String?
+  id    String  @id @default(uuid())
+  notes String?
 
-  prescribedBy User?        @relation("PrescribedMedications", fields: [prescribedById], references: [id])
-  issuedBy     User?        @relation("IssuedMedications", fields: [issuedById], references: [id])
-  patient      User?        @relation("patients", fields: [patientId], references: [id])
-  medications  Medication[] @relation("PrescriptionMedications")
+  diagnosisId String    @unique
+  diagnosis   Diagnosis @relation(fields: [diagnosisId], references: [id])
 
-  @@index([prescribedById])
-  @@index([issuedById])
+  medications PrescriptionMedication[]
+  programs    PrescriptionProgram[]
+  order       Order?
+
+  createdAt DateTime @default(now())
+
+  @@map("prescriptions")
+}
+
+model PrescriptionMedication {
+  id                 String   @id @default(uuid())
+  prescriptionId     String
+  inventoryId        String
+  dosage             String?
+  frequency          String?
+  durationDays       Int?     @map("duration_days")
+  quantityPrescribed Decimal? @map("quantity_prescribed") @db.Decimal(10, 2)
+  instructions       String?
+  createdAt          DateTime @default(now()) @map("created_at")
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  inventory    Inventory    @relation(fields: [inventoryId], references: [id])
+
+  @@unique([prescriptionId, inventoryId])
+  @@map("prescription_medications")
+}
+
+model PrescriptionProgram {
+  id             String    @id @default(uuid())
+  prescriptionId String    @map("prescription_id")
+  programId      String    @map("program_id")
+  scheduleDate   DateTime? @map("schedule_date")
+  priority       String?
+  instructions   String?
+  createdAt      DateTime  @default(now()) @map("created_at")
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  program      Program      @relation(fields: [programId], references: [id])
+
+  @@unique([prescriptionId, programId])
+  @@map("prescription_programs")
+}
+
+model Program {
+  id              String          @id @default(uuid())
+  name            String
+  type            ProgramCategory
+  description     String?
+  durationMinutes Int?            @map("duration_minutes")
+  createdAt       DateTime        @default(now()) @map("created_at")
+
+  prescriptionPrograms PrescriptionProgram[]
+
+  @@map("programs")
+}
+
+model Inventory {
+  id       String            @id @default(uuid())
+  name     String
+  category InventoryCategory
+  image    String?
+
+  createdAt DateTime @default(now()) @map("created_at")
+
+  stocks                  Stock[]
+  prescriptionMedications PrescriptionMedication[]
+
+  @@map("inventories")
+}
+
+model Stock {
+  id          String    @id @default(uuid())
+  inventoryId String    @map("inventory_id")
+  inventory   Inventory @relation(fields: [inventoryId], references: [id])
+
+  numberAvailable Int       @map("number_available")
+  numberSold      Int       @default(0) @map("number_sold")
+  batchNo         String?
+  expiry          DateTime?
+
+  @@map("stocks")
+}
+
+model Finance {
+  id          String          @id @default(uuid())
+  title       String
+  description String?
+  category    FinanceCategory
+  amount      Decimal         @db.Decimal(10, 2)
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
+
+  @@map("finances")
+}
+
+model Order {
+  id             String @id @default(uuid())
+  prescriptionId String @unique @map("prescription_id")
+
+  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+
+  totalAmount Decimal     @db.Decimal(10, 2)
+  status      OrderStatus @default(PENDING)
+
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  @@map("orders")
+}
+
+enum OrderStatus {
+  PENDING
+  PAID
+  CANCELLED
+  REFUNDED
 }
 
 enum Role {
   DOCTOR
   PATIENT
-  PHARMACIST
-  NURSE
+  ADMIN
+}
+
+enum InventoryCategory {
+  MEDICATION
+  EQUIPMENT
+  CONSUMABLE
+}
+
+enum ProgramCategory {
+  SURGERY
+  TEST
+  SCAN
+}
+
+enum FinanceCategory {
+  INCOME
+  EXPENSE
+}
+
+enum PaymentStatus {
+  UNPAID
+  PAID
+}
+
+enum AppointmentStatus {
+  NOTSCHEDULED
+  SCHEDULED
+  COMPLETE
+  MISSED
+  RESCHEDULED
+  CANCELLED
+}
+
+enum Severity {
+  LOW
+  MEDIUM
+  HIGH
+}
+
+enum Availabilty {
+  BUSY
+  AWAY
+  AVAILABLE
 }
