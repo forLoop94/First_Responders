@@ -271,6 +271,7 @@ model Program {
   type            ProgramCategory
   description     String?
   durationMinutes Int?            @map("duration_minutes")
+  unitCost        Decimal         @default(0) @db.Decimal(10, 2)
   createdAt       DateTime        @default(now()) @map("created_at")
 
   prescriptionPrograms PrescriptionProgram[]
@@ -288,6 +289,7 @@ model Inventory {
 
   stocks                  Stock[]
   prescriptionMedications PrescriptionMedication[]
+  orderItems              OrderItem[]
 
   @@map("inventories")
 }
@@ -296,11 +298,13 @@ model Stock {
   id          String    @id @default(uuid())
   inventoryId String    @map("inventory_id")
   inventory   Inventory @relation(fields: [inventoryId], references: [id])
+  unitCost    Decimal   @default(0) @db.Decimal(10, 2)
 
-  numberAvailable Int       @map("number_available")
-  numberSold      Int       @default(0) @map("number_sold")
+  numberAvailable Int         @map("number_available")
+  numberSold      Int         @default(0) @map("number_sold")
   batchNo         String?
   expiry          DateTime?
+  orderItems      OrderItem[]
 
   @@map("stocks")
 }
@@ -320,17 +324,35 @@ model Finance {
 
 model Order {
   id             String @id @default(uuid())
+  email          String @default("prescriptionorder@mail.com")
   prescriptionId String @unique @map("prescription_id")
 
   prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
 
   totalAmount Decimal     @db.Decimal(10, 2)
   status      OrderStatus @default(PENDING)
+  items       OrderItem[]
 
   createdAt DateTime @default(now())
   updatedAt DateTime @updatedAt
 
   @@map("orders")
+}
+
+model OrderItem {
+  id String @id @default(uuid())
+
+  orderId String
+  stockId String
+
+  quantity Int
+
+  order       Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stock       Stock      @relation(fields: [stockId], references: [id])
+  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
+  inventoryId String?
+
+  @@map("order_items")
 }
 
 enum OrderStatus {
@@ -388,3 +410,5 @@ enum Availabilty {
   AWAY
   AVAILABLE
 }
+
+// Enforce only medication inventory to be prescribed

@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { getMedications } from "../../controllers/medications/medicationsController";
+// import { Router } from "express";
+// import { getMedications } from "../../controllers/medications/medicationsController";
 
-const router = Router();
+// const router = Router();
 
-router.get("/", getMedications);
+// router.get("/", getMedications);
 
-export default router;
+// export default router;

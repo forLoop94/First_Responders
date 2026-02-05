@@ -1,8 +1,8 @@
-import { Router } from "express";
-import { getExpenses } from "../../controllers/expenses/expensesController";
+// import { Router } from "express";
+// import { getExpenses } from "../../controllers/expenses/expensesController";
 
-const router = Router();
+// const router = Router();
 
-router.get("/", getExpenses);
+// router.get("/", getExpenses);
 
-export default router;
+// export default router;

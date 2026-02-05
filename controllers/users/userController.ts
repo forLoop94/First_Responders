@@ -57,7 +57,7 @@ export const getUser = async (req: Request, res: Response): Promise<void> => {
 
 export const getCurrentUser = async (
   req: AuthenticatedRequest,
-  res: Response
+  res: Response,
 ): Promise<void> => {
   if (!req.user) {
     return sendError(res, "Unauthorized. Please log in again.", 401);
@@ -71,7 +71,7 @@ export const getCurrentUser = async (
         name: true,
         email: true,
         role: true,
-        profileImage: true,
+        //profileImage: true,
       },
     });
 
@@ -89,33 +89,33 @@ export const getCurrentUser = async (
   }
 };
 
-export const userImageUpload = async (req: Request, res: Response) => {
-  try {
-    if (!req.file) {
-      sendError(res, "No file uploaded.", 400);
-      return;
-    }
+// export const userImageUpload = async (req: Request, res: Response) => {
+//   try {
+//     if (!req.file) {
+//       sendError(res, "No file uploaded.", 400);
+//       return;
+//     }
 
-    const fileStr = `data:${
-      req.file.mimetype
-    };base64,${req.file.buffer.toString("base64")}`;
+//     const fileStr = `data:${
+//       req.file.mimetype
+//     };base64,${req.file.buffer.toString("base64")}`;
 
-    const uploadResponse = await cloudinary.uploader.upload(fileStr, {
-      folder: "user_profiles",
-    });
+//     const uploadResponse = await cloudinary.uploader.upload(fileStr, {
+//       folder: "user_profiles",
+//     });
 
-    const updatedUser = await prisma.user.update({
-      where: { id: req.body.userId },
-      data: { profileImage: uploadResponse.secure_url },
-    });
+//     const updatedUser = await prisma.user.update({
+//       where: { id: req.body.userId },
+//       data: { profileImage: uploadResponse.secure_url },
+//     });
 
-    res.json({
-      message: "Upload successful",
-      imageUrl: uploadResponse.secure_url,
-    });
-  } catch (err) {
-    console.error(err);
-    sendError(res, "Upload failed.", 500);
-    return;
-  }
-};
+//     res.json({
+//       message: "Upload successful",
+//       imageUrl: uploadResponse.secure_url,
+//     });
+//   } catch (err) {
+//     console.error(err);
+//     sendError(res, "Upload failed.", 500);
+//     return;
+//   }
+// };

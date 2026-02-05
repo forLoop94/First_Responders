@@ -1,4 +1,5 @@
 import { PrismaClient } from "@prisma/client";
+import { Prisma } from "@prisma/client";
 import { faker } from "@faker-js/faker";
 
 const prisma = new PrismaClient();
@@ -109,6 +110,11 @@ async function seed() {
     "https://images.unsplash.com/photo-1587854692152-cbe660dbde88?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8OHx8bWVkaWNhdGlvbnN8ZW58MHx8MHx8fDA%3D",
     "https://images.unsplash.com/photo-1696861286643-341a8d7a79e9?w=500&auto=format&fit=crop&q=60&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTF8fG1lZGljYXRpb25zfGVufDB8fDB8fHww",
   ];
+
+  const money = (min: number, max: number) =>
+    faker.number.float({ min, max, fractionDigits: 2 }).toFixed(2);
+
+  // usage
   for (let i = 0; i < NUM_INVENTORIES; i++) {
     const category = faker.helpers.arrayElement([
       "MEDICATION",
@@ -125,6 +131,7 @@ async function seed() {
             : null,
         stocks: {
           create: {
+            unitCost: new Prisma.Decimal(money(500, 12_000)),
             numberAvailable: faker.number.int({ min: 50, max: 500 }),
             batchNo: `BATCH-${faker.number.int({ min: 1, max: 100 })}`,
             expiry: faker.date.future(),
@@ -144,6 +151,7 @@ async function seed() {
         type: faker.helpers.arrayElement(["SURGERY", "TEST", "SCAN"]),
         description: faker.commerce.productDescription(),
         durationMinutes: faker.number.int({ min: 15, max: 180 }),
+        unitCost: new Prisma.Decimal(money(70_000, 300_000)),
       },
     });
     programs.push(program);
