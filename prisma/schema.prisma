@@ -289,7 +289,6 @@ model Inventory {
 
   stocks                  Stock[]
   prescriptionMedications PrescriptionMedication[]
-  orderItems              OrderItem[]
 
   @@map("inventories")
 }
@@ -309,17 +308,17 @@ model Stock {
   @@map("stocks")
 }
 
-model Finance {
-  id          String          @id @default(uuid())
-  title       String
+model LedgerEntry {
+  id     String     @id @default(uuid())
+  title  String
+  type   LedgerType
+  amount Decimal    @db.Decimal(14, 2)
+
   description String?
-  category    FinanceCategory
-  amount      Decimal         @db.Decimal(10, 2)
+  reference   String?
+  occurredAt  DateTime
 
-  createdAt DateTime @default(now()) @map("created_at")
-  updatedAt DateTime @updatedAt @map("updated_at")
-
-  @@map("finances")
+  createdAt DateTime @default(now())
 }
 
 model Order {
@@ -347,10 +346,8 @@ model OrderItem {
 
   quantity Int
 
-  order       Order      @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  stock       Stock      @relation(fields: [stockId], references: [id])
-  inventory   Inventory? @relation(fields: [inventoryId], references: [id])
-  inventoryId String?
+  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stock Stock @relation(fields: [stockId], references: [id])
 
   @@map("order_items")
 }
@@ -411,4 +408,7 @@ enum Availabilty {
   AVAILABLE
 }
 
-// Enforce only medication inventory to be prescribed
+enum LedgerType {
+  CREDIT
+  DEBIT
+}

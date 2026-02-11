@@ -9,7 +9,8 @@
     "build:server": "tsc",
     "build:client": "cd client && npm install --legacy-peer-deps && npm run build",
     "dev": "nodemon server.ts",
-    "client": "cd client && npm run dev"
+    "client": "cd client && npm run dev",
+    "devStart": "nodemon script.ts"
   },
   "prisma": {
     "seed": "ts-node prisma/seed.ts"

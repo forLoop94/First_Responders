@@ -6,7 +6,7 @@ import {
 
 const router = Router();
 
-router.post("/", processPayment);
+router.get("/:id", processPayment);
 router.patch("/verify-payment", verifyPayment);
 
 export default router;

@@ -13,6 +13,7 @@ export const processPayment = async (req: Request, res: Response) => {
   console.log("Request Body:", req.body);
   try {
     const { id } = req.params;
+    console.log("Request id:", id);
 
     const order = await prisma.order.findUnique({
       where: { id },
@@ -23,11 +24,16 @@ export const processPayment = async (req: Request, res: Response) => {
       return;
     }
 
+    const amountInKobo = order.totalAmount
+      .mul(100)
+      .toDecimalPlaces(0)
+      .toNumber();
+
     const paystackResponse = await axios.post(
       "https://api.paystack.co/transaction/initialize",
       {
         email: order.email,
-        amount: order.totalAmount, // Paystack uses kobo (1 NGN = 100 kobo)
+        amount: amountInKobo, //1 NGN = 100 kobo
         currency: "NGN",
         callback_url: `${process.env.FRONTEND_URL_REACT}/success`,
       },
@@ -95,6 +101,17 @@ export const verifyPayment = async (req: Request, res: Response) => {
         await tx.order.update({
           where: { id: order.id },
           data: { status: "PAID" },
+        });
+
+        await tx.ledgerEntry.create({
+          data: {
+            title: "Patient prescription",
+            type: "CREDIT",
+            amount: order.totalAmount,
+            description: `Prescription with reference ${reference}`,
+            reference,
+            occurredAt: new Date(),
+          },
         });
       });
 

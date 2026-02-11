@@ -4,6 +4,7 @@ import Stat from "../components/Stat";
 import Card from "../components/Card";
 import ScoreLineChart from "../components/Chart";
 import Cally from "../components/Cally";
+import CheckoutButton from "../components/checkout";
 
 const Dashboard: React.FC = () => {
   return (
@@ -27,7 +28,7 @@ const Dashboard: React.FC = () => {
             are title and actions parts
           </p>
           <div className="card-actions justify-end">
-            <button className="btn btn-primary">Buy Now</button>
+            <CheckoutButton />
           </div>
         </Card>
         <div className="card card-border bg-base-100 shadow lg:row-span-2">

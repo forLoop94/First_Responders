@@ -16,6 +16,7 @@ import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
 import { loader as patientsLoader } from "./loaders/patientsLoader";
+import Success from "./pages/Success";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -49,6 +50,10 @@ const router = createBrowserRouter([
       {
         path: "reset-password/:id/:resetString",
         element: <ResetPassword />,
+      },
+      {
+        path: "success",
+        element: <Success />,
       },
       {
         path: "dashboard",
