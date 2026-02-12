@@ -9,6 +9,8 @@ import doctorRouter from "./routes/api/doctor";
 import patientRouter from "./routes/api/patient";
 import paymentRouter from "./routes/api/payment";
 import ledgerRouter from "./routes/api/ledger";
+import inventoryRouter from "./routes/api/inventory";
+import programRouter from "./routes/api/program";
 import ordersRouter from "./routes/api/order";
 import prescriptionsRouter from "./routes/api/prescription";
 import cookieParser from "cookie-parser";
@@ -53,6 +55,8 @@ app.use("/api/doctors", doctorRouter);
 app.use("/api/patients", patientRouter);
 app.use("/api/payments", paymentRouter);
 app.use("/api/finance", ledgerRouter);
+app.use("/api/inventories", inventoryRouter);
+app.use("/api/programs", programRouter);
 app.use("/api/orders", ordersRouter);
 app.use("/api/prescriptions", prescriptionsRouter);
 
