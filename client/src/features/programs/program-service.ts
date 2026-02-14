@@ -1,4 +1,4 @@
-import { IProgramsData } from "./i-programs";
+import { IProgramsData } from "./programs-interfaces";
 import {
   IPaginated,
   IPaginatedResponseFormat,
