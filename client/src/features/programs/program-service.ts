@@ -1,6 +1,9 @@
-import { IProgramsData } from "../interfaces/i-programs";
-import { IPaginated, IPaginatedResponseFormat } from "../interfaces/i-response";
-import customFetch from "../utils/customFetch";
+import { IProgramsData } from "./i-programs";
+import {
+  IPaginated,
+  IPaginatedResponseFormat,
+} from "../../interfaces/i-response";
+import customFetch from "../../utils/customFetch";
 
 export const fetchPrograms = async (
   params: any,

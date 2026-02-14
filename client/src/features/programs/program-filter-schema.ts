@@ -1,4 +1,4 @@
-import { FilterField } from "../interfaces/i-filters";
+import { FilterField } from "../../interfaces/i-filters";
 
 export const programSchema: FilterField[] = [
   {

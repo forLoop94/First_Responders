@@ -1,10 +1,10 @@
 import React, { useState } from "react";
-import { growl } from "../../utils/growl";
-import LoadingButton from "../../components/LoadingButton";
-import { Role } from "../../enums/auth/e-auth";
+import { growl } from "../../../utils/growl";
+import LoadingButton from "../../../components/LoadingButton";
+import { Role } from "../../../enums/auth/e-auth";
 import { useNavigate } from "react-router-dom";
-import Logo from "../../components/Logo";
-import customFetch from "../../utils/customFetch";
+import Logo from "../../../components/Logo";
+import customFetch from "../../../utils/customFetch";
 
 const Register: React.FC = () => {
   const navigate = useNavigate();
@@ -42,7 +42,7 @@ const Register: React.FC = () => {
   };
 
   const handleChange = (
-    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>
+    e: React.ChangeEvent<HTMLInputElement | HTMLSelectElement>,
   ) => {
     setData({
       ...data,

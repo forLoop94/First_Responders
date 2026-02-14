@@ -1,4 +1,4 @@
-import customFetch from "../utils/customFetch";
+import customFetch from "../../utils/customFetch";
 
 const base_URL = "/auth";
 

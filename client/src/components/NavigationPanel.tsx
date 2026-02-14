@@ -8,7 +8,7 @@ import Logo from "./Logo";
 import Search from "./Search";
 import NotificationBell from "./NotificationBell";
 import { growl } from "../utils/growl";
-import { logoutAPI } from "../services/auth-service";
+import { logoutAPI } from "../features/auth/auth-service";
 import { useNavigate } from "react-router-dom";
 import { UserContext } from "../pages/Root";
 

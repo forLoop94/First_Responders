@@ -1,11 +1,11 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useLoaderData } from "react-router-dom";
-import { programsQuery } from "../loaders/programsLoader";
-import FilterContainer from "../components/FilterContainer";
-import { programSchema } from "../filter-schemas/program-filter-schema";
+import { programsQuery } from "./program-loader";
+import FilterContainer from "../../components/FilterContainer";
+import { programSchema } from "./program-filter-schema";
 import { createContext } from "react";
-import PaginationButtons from "../components/PaginationButtons";
+import PaginationButtons from "../../components/PaginationButtons";
 
 export const ProgramContext = createContext<any>(null);
 

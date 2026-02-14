@@ -1,12 +1,12 @@
 import { createBrowserRouter, RouterProvider } from "react-router-dom";
 import "./App.css";
 import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
-import Login from "./pages/auth/Login";
+import Login from "./features/auth/components/Login";
 import Growl from "./components/Growler";
 import Root from "./pages/Root";
-import ForgotPassword from "./pages/auth/ForgotPassword";
-import ResetPassword from "./pages/auth/ResetPassword";
-import Register from "./pages/auth/Register";
+import ForgotPassword from "./features/auth/components/ForgotPassword";
+import ResetPassword from "./features/auth/components/ResetPassword";
+import Register from "./features/auth/components/Register";
 import Dashboard from "./pages/Dashboard";
 import Appointments from "./pages/Appointments";
 import Settings from "./pages/Settings";
@@ -16,9 +16,9 @@ import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
 import { loader as patientsLoader } from "./loaders/patientsLoader";
-import { loader as programsLoader } from "./loaders/programsLoader";
+import { loader as programsLoader } from "./features/programs/program-loader";
 import Success from "./pages/Success";
-import Programs from "./pages/Programs";
+import Programs from "./features/programs/Program";
 
 const queryClient = new QueryClient({
   defaultOptions: {

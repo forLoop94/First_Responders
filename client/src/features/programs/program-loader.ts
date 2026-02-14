@@ -1,6 +1,6 @@
 import { LoaderFunctionArgs } from "react-router-dom";
 import { QueryClient } from "@tanstack/react-query";
-import { fetchPrograms } from "../services/program-service";
+import { fetchPrograms } from "./program-service";
 
 export const programsQuery = (params: any) => {
   const { search, type, page, limit } = params;

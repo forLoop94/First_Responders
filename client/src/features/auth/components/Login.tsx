@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { growl } from "../../utils/growl";
+import { growl } from "../../../utils/growl";
 import { useNavigate } from "react-router-dom";
-import LoadingButton from "../../components/LoadingButton";
-import Logo from "../../components/Logo";
-import { loginAPI } from "../../services/auth-service";
+import LoadingButton from "../../../components/LoadingButton";
+import Logo from "../../../components/Logo";
+import { loginAPI } from "../auth-service";
 
 const Login: React.FC = () => {
   const navigate = useNavigate();

@@ -1,9 +1,9 @@
 import React, { useState } from "react";
-import { growl } from "../../utils/growl";
+import { growl } from "../../../utils/growl";
 import { useNavigate, useParams } from "react-router-dom";
-import LoadingButton from "../../components/LoadingButton";
-import Logo from "../../components/Logo";
-import customFetch from "../../utils/customFetch";
+import LoadingButton from "../../../components/LoadingButton";
+import Logo from "../../../components/Logo";
+import customFetch from "../../../utils/customFetch";
 
 interface IResetData {
   password: string;

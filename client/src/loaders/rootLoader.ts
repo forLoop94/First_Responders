@@ -1,6 +1,6 @@
 import { growl } from "../utils/growl";
 import { redirect } from "react-router-dom";
-import { refreshToken } from "../services/auth-service";
+import { refreshToken } from "../features/auth/auth-service";
 import { getCurrentUser } from "../services/user-service";
 
 export const loader = async () => {

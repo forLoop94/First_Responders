@@ -1,8 +1,8 @@
 import React, { useState } from "react";
-import { growl } from "../../utils/growl";
-import LoadingButton from "../../components/LoadingButton";
-import Logo from "../../components/Logo";
-import customFetch from "../../utils/customFetch";
+import { growl } from "../../../utils/growl";
+import LoadingButton from "../../../components/LoadingButton";
+import Logo from "../../../components/Logo";
+import customFetch from "../../../utils/customFetch";
 
 const ForgotPassword: React.FC = () => {
   const [email, setEmail] = useState<string>("");
