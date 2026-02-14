@@ -16,7 +16,9 @@ import HomeLayout from "./pages/HomeLayout";
 
 import { loader as rootLoader } from "./loaders/rootLoader";
 import { loader as patientsLoader } from "./loaders/patientsLoader";
+import { loader as programsLoader } from "./loaders/programsLoader";
 import Success from "./pages/Success";
+import Programs from "./pages/Programs";
 
 const queryClient = new QueryClient({
   defaultOptions: {
@@ -76,6 +78,11 @@ const router = createBrowserRouter([
             path: "patients",
             element: <PatientsUI />,
             loader: patientsLoader(queryClient),
+          },
+          {
+            path: "programs",
+            element: <Programs />,
+            loader: programsLoader(queryClient),
           },
         ],
       },

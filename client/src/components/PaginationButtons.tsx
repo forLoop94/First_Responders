@@ -1,16 +1,18 @@
-import React, { useContext } from "react";
 import { HiChevronDoubleLeft, HiChevronDoubleRight } from "react-icons/hi";
 import { useLocation, useNavigate } from "react-router-dom";
-import { PatientsContext } from "../pages/PatientsUI";
+import { IPaginated } from "../interfaces/i-response";
 
-const PaginationButtons: React.FC = () => {
-  const patientsContext = useContext(PatientsContext);
+interface PaginationButtonsProps<T> {
+  data: IPaginated<T> | undefined;
+}
 
-  if (!patientsContext || !patientsContext.data) {
+// The comma <T,> tells TypeScript "this is a generic parameter, not a JSX tag opening
+const PaginationButtons = <T,>({ data }: PaginationButtonsProps<T>) => {
+  if (!data || !data.items) {
     return null; // or loading spinner
   }
 
-  const { numOfPages, currentPage } = patientsContext.data;
+  const { numOfPages, currentPage } = data;
 
   const { search, pathname } = useLocation();
   const navigate = useNavigate();
@@ -54,7 +56,7 @@ const PaginationButtons: React.FC = () => {
       pageButtons.push(
         <span className="btn btn-ghost" key="dots-1">
           ...
-        </span>
+        </span>,
       );
     }
 
@@ -66,7 +68,7 @@ const PaginationButtons: React.FC = () => {
       pageButtons.push(
         <span className="btn btn-ghost" key="dots+1">
           ...
-        </span>
+        </span>,
       );
     }
 

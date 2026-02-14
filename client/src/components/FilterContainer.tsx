@@ -1,11 +1,9 @@
-import React, { ChangeEvent, useContext } from "react";
+import React from "react";
 import { Form, useSubmit, Link } from "react-router-dom";
 import FormRow from "./FormRow";
 import FormRowSelect from "./FormRowSelect";
-import { E_SORT_VALUES } from "../enums/e-sorting";
 import Card from "./Card";
 import { FilterField } from "../interfaces/i-filters";
-//import { PatientsContext } from "../pages/PatientsUI";
 
 interface IFilterContainer {
   searchValues: Record<string, string>;
@@ -19,20 +17,6 @@ const FilterContainer: React.FC<IFilterContainer> = ({
   resetPath,
 }) => {
   const submit = useSubmit();
-
-  // const debounce = (onChange: (form: HTMLFormElement) => void) => {
-  //   let timeout: NodeJS.Timeout;
-
-  //   return (e: ChangeEvent<HTMLInputElement>) => {
-  //     const form = e.currentTarget.form;
-  //     if (!form) return;
-
-  //     clearTimeout(timeout);
-  //     timeout = setTimeout(() => {
-  //       onChange(form);
-  //     }, 2000);
-  //   };
-  // };
 
   const debounceRef = React.useRef<NodeJS.Timeout | null>(null);
 

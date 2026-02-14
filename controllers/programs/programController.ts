@@ -19,7 +19,7 @@ export const getPrograms = async (
 
     const { page, limit, skip } = getPagination(req);
 
-    const [programs, totalPrograms] = await Promise.all([
+    const [items, totalItems] = await Promise.all([
       prisma.program.findMany({
         where,
         orderBy: { createdAt: "desc" },
@@ -31,18 +31,18 @@ export const getPrograms = async (
       }),
     ]);
 
-    if (!programs || programs.length === 0) {
+    if (!items || items.length === 0) {
       sendSuccess(res, "No programs found.");
       return;
     }
 
-    const numOfPages = Math.ceil(totalPrograms / limit) || 1;
+    const numOfPages = Math.ceil(totalItems / limit) || 1;
 
     sendSuccess(res, "programs fetched successfully.", {
-      totalPrograms,
+      totalItems,
       numOfPages,
       currentPage: page,
-      programs,
+      items,
     });
   } catch (error: any) {
     console.error("Error fetching programs:", error);

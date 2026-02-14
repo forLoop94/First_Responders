@@ -11,3 +11,16 @@ export interface IUserResponseFormat {
   message: string;
   data: ICurrentUser;
 }
+
+export interface IPaginatedResponseFormat<IPaginated> {
+  success: boolean;
+  message: string;
+  data: IPaginated;
+}
+
+export interface IPaginated<IDataObject> {
+  totalItems: number;
+  numOfPages: number;
+  currentPage: number;
+  items: IDataObject[];
+}

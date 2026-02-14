@@ -19,7 +19,7 @@ export const getInventories = async (
 
     const { page, limit, skip } = getPagination(req);
 
-    const [inventories, totalInventories] = await Promise.all([
+    const [items, totalItems] = await Promise.all([
       prisma.inventory.findMany({
         where,
         include: { stocks: true },
@@ -32,18 +32,18 @@ export const getInventories = async (
       }),
     ]);
 
-    if (!inventories || inventories.length === 0) {
+    if (!items || items.length === 0) {
       sendSuccess(res, "No inventories found.");
       return;
     }
 
-    const numOfPages = Math.ceil(totalInventories / limit) || 1;
+    const numOfPages = Math.ceil(totalItems / limit) || 1;
 
     sendSuccess(res, "Inventories fetched successfully.", {
-      totalInventories,
+      totalItems,
       numOfPages,
       currentPage: page,
-      inventories,
+      items,
     });
   } catch (error: any) {
     console.error("Error fetching inventories:", error);

@@ -22,7 +22,7 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="/dashboard"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/dashboard"
+          "/dashboard",
         )}`}
       >
         <RxDashboard />
@@ -32,7 +32,7 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="/dashboard/appointments"
         className={`btn relative btn-sm btn-ghost w-full justify-start hover:bg-base-100 ${isActive(
-          "/dashboard/appointments"
+          "/dashboard/appointments",
         )}`}
       >
         <SlCalender />
@@ -42,26 +42,26 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="/dashboard/patients"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/dashboard/patients"
+          "/dashboard/patients",
         )}`}
       >
         <TbWheelchair />
         Patients
       </Link>
       <Link
-        to="#"
+        to="/dashboard/programs"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/#"
+          "/dashboard/programs",
         )}`}
       >
         <FcDepartment />
-        Departments
+        Programs
       </Link>
       <small className="text-xs mb-2 mt-5">Reports</small>
       <Link
         to="#"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "#"
+          "#",
         )}`}
       >
         <TbBrandGoogleAnalytics />
@@ -70,7 +70,7 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="#"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/#"
+          "/#",
         )}`}
       >
         <SiWebmoney />
@@ -80,7 +80,7 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="#"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "#"
+          "#",
         )}`}
       >
         <FiHelpCircle />
@@ -89,7 +89,7 @@ const DoctorsDashboard: React.FC = () => {
       <Link
         to="/dashboard/settings"
         className={`btn btn-sm btn-ghost justify-start hover:bg-base-100 ${isActive(
-          "/dashboard/settings"
+          "/dashboard/settings",
         )}`}
       >
         <IoSettingsOutline />
