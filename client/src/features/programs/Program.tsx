@@ -1,11 +1,12 @@
 import { useQuery } from "@tanstack/react-query";
 import React from "react";
 import { useLoaderData } from "react-router-dom";
-import { programsQuery } from "./program-loader";
 import FilterContainer from "../../components/FilterContainer";
 import { programSchema } from "./program-filter-schema";
 import { createContext } from "react";
 import PaginationButtons from "../../components/PaginationButtons";
+import { programsQuery } from "./program-query";
+import ProgramGrid from "./Program-grid";
 
 export const ProgramContext = createContext<any>(null);
 
@@ -22,6 +23,7 @@ const Programs: React.FC = () => {
         filters={programSchema}
         resetPath="/dashboard/patients"
       />
+      <ProgramGrid data={data} />
       <PaginationButtons data={data} />
     </ProgramContext.Provider>
   );

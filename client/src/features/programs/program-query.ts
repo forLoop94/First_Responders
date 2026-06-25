@@ -7,7 +7,7 @@ export const programsQuery = (params: any) => {
     search: search ?? "",
     type: type ?? "SURGERY",
     page: page ?? 1,
-    limit: limit ?? 1,
+    limit: limit ?? 5,
   };
   return {
     queryKey: [

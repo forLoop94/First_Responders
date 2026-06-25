@@ -20,7 +20,7 @@ async function clearDatabase() {
   await prisma.stock.deleteMany();
   await prisma.inventory.deleteMany();
   await prisma.program.deleteMany();
-  await prisma.finance.deleteMany();
+  // await prisma.finance.deleteMany();
   await prisma.patient.deleteMany();
   await prisma.doctor.deleteMany();
   await prisma.admin.deleteMany();

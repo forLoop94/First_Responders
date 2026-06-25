@@ -1,14 +1,5 @@
-// This is your Prisma schema file,
-// learn more about it in the docs: https://pris.ly/d/prisma-schema
-
-// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
-// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
-
-// npx prisma generate npx prisma migrate reset npx prisma init --datasource-provider postgresql Remove-Item -Recurse -Force prisma
-
 generator client {
   provider = "prisma-client-js"
-  // output   = "../generated/prisma"
 }
 
 datasource db {
@@ -16,106 +7,18 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-// model User {
-//   id           String   @id @default(uuid())
-//   name         String
-//   email        String   @unique
-//   password     String
-//   profileImage String?  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg")
-//   role         Role
-//   createdAt    DateTime @default(now())
-//   updatedAt    DateTime @updatedAt
-//   isVerified   Boolean  @default(false)
-
-//   prescribedMedications Prescription[] @relation("PrescribedMedications")
-//   issuedMedications     Prescription[] @relation("IssuedMedications")
-//   patients              Prescription[] @relation("patients")
-//   Expenses              Expenses[]
-// }
-
-// model UserVerification {
-//   id           String   @id @default(uuid())
-//   userId       String
-//   uniqueString String
-//   createdAt    DateTime
-//   expiresAt    DateTime
-// }
-
-// model PasswordReset {
-//   id          String   @id @default(uuid())
-//   userId      String
-//   resetString String
-//   createdAt   DateTime
-//   expiresAt   DateTime
-// }
-
-// model Appointment {
-//   id      String   @id @default(uuid())
-//   title   String
-//   start   DateTime
-//   end     DateTime
-//   type    String
-//   tooltip String
-// }
-
-// model Expenses {
-//   id             String   @id @default(uuid())
-//   title          String
-//   amount         Int
-//   date           DateTime
-//   authorizedBy   User?    @relation(fields: [authorizedById], references: [id])
-//   authorizedById String?
-// }
-
-// model Invoice {
-//   id           String @id @default(uuid())
-//   uniqueString String @unique
-//   billables    Json
-//   amount       Int
-//   quantity     Int
-// }
-
-// model Medication {
-//   id             String         @id @default(uuid())
-//   name           String         @unique
-//   manufacturer   String
-//   price          Int
-//   prescriptions  Prescription[] @relation("PrescriptionMedications")
-//   prescriptionId String?
-// }
-
-// model Prescription {
-//   id               String   @id @default(uuid())
-//   uniqueString     String   @unique
-//   prescriptionDate DateTime
-//   issueDate        DateTime
-//   prescribedById   String?
-//   issuedById       String?
-//   patientId        String?
-
-//   prescribedBy User?        @relation("PrescribedMedications", fields: [prescribedById], references: [id])
-//   issuedBy     User?        @relation("IssuedMedications", fields: [issuedById], references: [id])
-//   patient      User?        @relation("patients", fields: [patientId], references: [id])
-//   medications  Medication[] @relation("PrescriptionMedications")
-
-//   @@index([prescribedById])
-//   @@index([issuedById])
-// }
-
 model User {
-  id       String @id @default(uuid())
-  name     String
-  email    String @unique
-  password String
-  role     Role
-
+  id         String   @id @default(uuid())
+  name       String
+  email      String   @unique
+  password   String
+  role       Role
   createdAt  DateTime @default(now()) @map("created_at")
   updatedAt  DateTime @updatedAt @map("updated_at")
   isVerified Boolean  @default(false) @map("is_verified")
-
-  patient Patient? // has one
-  doctor  Doctor?
-  admin   Admin?
+  admin      Admin?
+  doctor     Doctor?
+  patient    Patient?
 
   @@map("users")
 }
@@ -137,43 +40,40 @@ model PasswordReset {
 }
 
 model Patient {
-  id             String  @id @default(uuid())
+  id             String        @id @default(uuid())
   surname        String?
-  otherNames     String? @map("other_names")
-  profileImage   String  @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
-  referralStatus Boolean @map("referral_status")
-
-  userId       String        @unique @map("user_id")
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade) // belongs to
-  appointments Appointment[]
+  otherNames     String?       @map("other_names")
+  profileImage   String        @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
+  referralStatus Boolean       @map("referral_status")
+  userId         String        @unique @map("user_id")
+  appointments   Appointment[]
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("patients")
 }
 
 model Doctor {
-  id             String      @id @default(uuid())
-  surname        String?
-  otherNames     String?     @map("other_names")
-  profileImage   String?     @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
+  id             String        @id @default(uuid())
+  profileImage   String?       @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
   specialization String
-  licenseNumber  String      @map("license_number")
+  licenseNumber  String        @map("license_number")
   availability   Availabilty
-
-  userId       String        @unique @map("user_id")
-  user         User          @relation(fields: [userId], references: [id], onDelete: Cascade)
-  appointments Appointment[]
+  userId         String        @unique @map("user_id")
+  otherNames     String?       @map("other_names")
+  surname        String?
+  appointments   Appointment[]
+  user           User          @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("doctors")
 }
 
 model Admin {
   id           String  @id @default(uuid())
-  surname      String?
-  otherNames   String? @map("other_names")
   profileImage String? @default("https://icon-library.com/images/anonymous-avatar-icon/anonymous-avatar-icon-25.jpg") @map("profile_image")
-
-  userId String @unique @map("user_id")
-  user   User   @relation(fields: [userId], references: [id], onDelete: Cascade)
+  userId       String  @unique @map("user_id")
+  otherNames   String? @map("other_names")
+  surname      String?
+  user         User    @relation(fields: [userId], references: [id], onDelete: Cascade)
 
   @@map("admins")
 }
@@ -187,167 +87,145 @@ model Appointment {
   vitals            Boolean?
   paymentStatus     PaymentStatus     @default(UNPAID) @map("payment_status")
   appointmentStatus AppointmentStatus @default(NOTSCHEDULED) @map("APPOINTMENT_status")
-
-  patientId String?
-  doctorId  String?
-
-  patient   Patient?    @relation(fields: [patientId], references: [id])
-  doctor    Doctor?     @relation(fields: [doctorId], references: [id])
-  diagnoses Diagnosis[]
-
-  createdAt DateTime @default(now())
+  patientId         String?
+  doctorId          String?
+  createdAt         DateTime          @default(now())
+  doctor            Doctor?           @relation(fields: [doctorId], references: [id])
+  patient           Patient?          @relation(fields: [patientId], references: [id])
+  diagnoses         Diagnosis[]
 
   @@map("appointments")
 }
 
 model Diagnosis {
-  id          String   @id @default(uuid())
-  description String
-  severity    Severity
-
+  id            String        @id @default(uuid())
+  description   String
+  severity      Severity
   appointmentId String
-  appointment   Appointment @relation(fields: [appointmentId], references: [id])
-
-  prescription Prescription? // sometimes there could be diagnosis without prescriptions
-
-  createdAt DateTime @default(now())
+  createdAt     DateTime      @default(now())
+  appointment   Appointment   @relation(fields: [appointmentId], references: [id])
+  prescription  Prescription?
 
   @@map("diagnosis")
 }
 
 model Prescription {
-  id    String  @id @default(uuid())
-  notes String?
-
-  diagnosisId String    @unique
-  diagnosis   Diagnosis @relation(fields: [diagnosisId], references: [id])
-
+  id          String                   @id @default(uuid())
+  notes       String?
+  diagnosisId String                   @unique
+  createdAt   DateTime                 @default(now())
+  order       Order?
   medications PrescriptionMedication[]
   programs    PrescriptionProgram[]
-  order       Order?
-
-  createdAt DateTime @default(now())
+  diagnosis   Diagnosis                @relation(fields: [diagnosisId], references: [id])
 
   @@map("prescriptions")
 }
 
 model PrescriptionMedication {
-  id                 String   @id @default(uuid())
+  id                 String       @id @default(uuid())
   prescriptionId     String
   inventoryId        String
   dosage             String?
   frequency          String?
-  durationDays       Int?     @map("duration_days")
-  quantityPrescribed Decimal? @map("quantity_prescribed") @db.Decimal(10, 2)
+  durationDays       Int?         @map("duration_days")
+  quantityPrescribed Decimal?     @map("quantity_prescribed") @db.Decimal(10, 2)
   instructions       String?
-  createdAt          DateTime @default(now()) @map("created_at")
-
-  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
-  inventory    Inventory    @relation(fields: [inventoryId], references: [id])
+  createdAt          DateTime     @default(now()) @map("created_at")
+  inventory          Inventory    @relation(fields: [inventoryId], references: [id])
+  prescription       Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
 
   @@unique([prescriptionId, inventoryId])
   @@map("prescription_medications")
 }
 
 model PrescriptionProgram {
-  id             String    @id @default(uuid())
-  prescriptionId String    @map("prescription_id")
-  programId      String    @map("program_id")
-  scheduleDate   DateTime? @map("schedule_date")
+  id             String       @id @default(uuid())
+  prescriptionId String       @map("prescription_id")
+  programId      String       @map("program_id")
+  scheduleDate   DateTime?    @map("schedule_date")
   priority       String?
   instructions   String?
-  createdAt      DateTime  @default(now()) @map("created_at")
-
-  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
-  program      Program      @relation(fields: [programId], references: [id])
+  createdAt      DateTime     @default(now()) @map("created_at")
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
+  program        Program      @relation(fields: [programId], references: [id])
 
   @@unique([prescriptionId, programId])
   @@map("prescription_programs")
 }
 
 model Program {
-  id              String          @id @default(uuid())
-  name            String
-  type            ProgramCategory
-  description     String?
-  durationMinutes Int?            @map("duration_minutes")
-  unitCost        Decimal         @default(0) @db.Decimal(10, 2)
-  createdAt       DateTime        @default(now()) @map("created_at")
-
+  id                   String                @id @default(uuid())
+  name                 String
+  type                 ProgramCategory
+  description          String?
+  durationMinutes      Int?                  @map("duration_minutes")
+  createdAt            DateTime              @default(now()) @map("created_at")
+  unitCost             Decimal               @default(0) @db.Decimal(10, 2)
+  image                String?               @default("https://plus.unsplash.com/premium_photo-1661627133045-6fcffcefaa8c?fm=jpg&q=60&w=3000&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxzZWFyY2h8MTN8fHN1cmdlcnl8ZW58MHx8MHx8fDA%3D")
   prescriptionPrograms PrescriptionProgram[]
 
   @@map("programs")
 }
 
 model Inventory {
-  id       String            @id @default(uuid())
-  name     String
-  category InventoryCategory
-  image    String?
-
-  createdAt DateTime @default(now()) @map("created_at")
-
-  stocks                  Stock[]
+  id                      String                   @id @default(uuid())
+  name                    String
+  category                InventoryCategory
+  image                   String?
+  createdAt               DateTime                 @default(now()) @map("created_at")
   prescriptionMedications PrescriptionMedication[]
+  stocks                  Stock[]
 
   @@map("inventories")
 }
 
 model Stock {
-  id          String    @id @default(uuid())
-  inventoryId String    @map("inventory_id")
-  inventory   Inventory @relation(fields: [inventoryId], references: [id])
-  unitCost    Decimal   @default(0) @db.Decimal(10, 2)
-
+  id              String      @id @default(uuid())
+  inventoryId     String      @map("inventory_id")
   numberAvailable Int         @map("number_available")
   numberSold      Int         @default(0) @map("number_sold")
   batchNo         String?
   expiry          DateTime?
+  unitCost        Decimal     @default(0) @db.Decimal(10, 2)
   orderItems      OrderItem[]
+  inventory       Inventory   @relation(fields: [inventoryId], references: [id])
 
   @@map("stocks")
 }
 
 model LedgerEntry {
-  id     String     @id @default(uuid())
-  title  String
-  type   LedgerType
-  amount Decimal    @db.Decimal(14, 2)
-
+  id          String     @id @default(uuid())
+  title       String
+  type        LedgerType
+  amount      Decimal    @db.Decimal(14, 2)
   description String?
   reference   String?
   occurredAt  DateTime
-
-  createdAt DateTime @default(now())
+  createdAt   DateTime   @default(now())
 }
 
 model Order {
-  id             String @id @default(uuid())
-  email          String @default("prescriptionorder@mail.com")
-  prescriptionId String @unique @map("prescription_id")
-
-  prescription Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
-
-  totalAmount Decimal     @db.Decimal(10, 2)
-  status      OrderStatus @default(PENDING)
-  items       OrderItem[]
-
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  id             String       @id @default(uuid())
+  prescriptionId String       @unique @map("prescription_id")
+  totalAmount    Decimal      @db.Decimal(10, 2)
+  status         OrderStatus  @default(PENDING)
+  createdAt      DateTime     @default(now())
+  updatedAt      DateTime     @updatedAt
+  email          String       @default("prescriptionorder@mail.com")
+  items          OrderItem[]
+  prescription   Prescription @relation(fields: [prescriptionId], references: [id], onDelete: Cascade)
 
   @@map("orders")
 }
 
 model OrderItem {
-  id String @id @default(uuid())
-
-  orderId String
-  stockId String
-
+  id       String @id @default(uuid())
+  orderId  String
+  stockId  String
   quantity Int
-
-  order Order @relation(fields: [orderId], references: [id], onDelete: Cascade)
-  stock Stock @relation(fields: [stockId], references: [id])
+  order    Order  @relation(fields: [orderId], references: [id], onDelete: Cascade)
+  stock    Stock  @relation(fields: [stockId], references: [id])
 
   @@map("order_items")
 }
